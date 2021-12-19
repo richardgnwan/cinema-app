@@ -3,7 +3,7 @@ import { Route, Routes, Outlet } from 'react-router'
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 
-export default function MainHomePage() {
+export default function MainTicketsPage() {
   return (
 
     <MainLayout>

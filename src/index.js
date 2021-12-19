@@ -16,7 +16,7 @@ ReactDOM.render(
   <React.StrictMode>
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <AuthProvider>
           <BrowserRouter>
             <App />
