@@ -5,7 +5,6 @@ import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 
 export default function MainHomePage() {
   return (
-
     <MainLayout>
 
       {/* home */}
