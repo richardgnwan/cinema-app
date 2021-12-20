@@ -1,7 +1,8 @@
 import { Fragment } from 'react'
 import { Route, Routes } from 'react-router'
 import { ADMIN_ROUTES, MAIN_ROUTES } from './AllRoutes'
-
+import AdminMovie from "../../AdminMovie";
+import AdminVoucher from "../../AdminVoucher";
 // function ItemLi (props) {
 //   const { data } = props;
 //   if (data.children) return (
@@ -48,6 +49,8 @@ export default function MyRouting() {
           ) }
         </Fragment>
       )) }
+      <Route exact path="/masterMovie" element={<AdminMovie/>}></Route>
+      <Route exact path="/masterVoucher" element={<AdminVoucher/>}></Route>
     </Routes>
   )
 }

@@ -1,4 +1,5 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
+import {getFirestore} from "@firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 
 var app;
@@ -26,3 +27,4 @@ if (getApps().length) {
 }
 
 export default app;
+export const db = getFirestore(app);
