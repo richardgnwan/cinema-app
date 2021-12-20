@@ -1235,6 +1235,14 @@ ul {
 /*==============================
 	Card
 ==============================*/
+.center{
+  text-align: center;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+}
 .card {
   margin-bottom: 30px;
 }
@@ -1465,6 +1473,16 @@ ul {
   width: 100%;
   font-family: 'Open Sans', sans-serif;
 }
+/*.orderDetails{*/
+/*  display: flex;*/
+/*  flex-direction: row;*/
+/*  justify-content: center;*/
+/*  align-items: flex-start;*/
+/*  flex-wrap: wrap;*/
+/*  width: 100%;*/
+/*  font-family: 'Open Sans', sans-serif;*/
+/*}*/
+
 .card--details .card__meta li:last-child {
   margin-bottom: 0;
 }
