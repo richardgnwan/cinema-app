@@ -1,9 +1,58 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Routes, Outlet } from 'react-router'
-
+import { query, where } from "firebase/firestore";
+import { db } from '../../config/auth/firebase'
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  documentId
+} from "firebase/firestore";
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 
+// format thousands
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export default function MainTicketsPage() {
+
+  const [tickets, setTickets] = useState([])
+
+  const getTickets = async () => {
+    const horderRef = collection(db, "horder");
+
+    const data = await getDocs(horderRef);
+    let list_tickets = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+    const jadwalRef = collection(db, "jadwal");
+    const movieRef = collection(db, "movie");
+
+    for (let index = 0; index < list_tickets.length; index++) {
+      const ticket = list_tickets[index];
+
+      const queryJadwal = query(jadwalRef, where(documentId(), "==", ticket.idJadwal));
+      const dataJadwal = await getDocs(queryJadwal);
+      let jadwal = dataJadwal.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+      list_tickets[index].jadwal = jadwal
+
+      const queryMovie = query(movieRef, where(documentId(), "==", jadwal.idMovie));
+      const dataMovie = await getDocs(queryMovie);
+      let movie = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+      list_tickets[index].movie = movie
+    }
+    console.log(list_tickets);
+
+    setTickets(list_tickets);
+  };
+
+  useEffect(() => {
+    getTickets();
+  }, [])
+
   return (
 
     <MainLayout>
@@ -33,21 +82,24 @@ export default function MainTicketsPage() {
               </ul>
             </div>
             {/* end plan features */}
+
+            {/* price */}
+            {tickets.map((ticket) => {
+              return <div className="col-12 col-md-6 col-lg-4" key={ticket.id}>
+                <div className="price">
+                  <div className="price__item price__item--first"><span>{ticket.movie.title}</span> <span>IDR {numberWithCommas(ticket.totalBayar)}</span></div>
+                  <div className="price__item"><span>Total Kursi : {ticket.totalKursi}</span></div>
+                  <div className="price__item"><span>Tanggal : {ticket.jadwal.tanggal}</span></div>
+                  <div className="price__item"><span>Jam Main : {ticket.jadwal.jamAwal}</span></div>
+                  <a href="#" className="price__btn">Show QR</a>
+                </div>
+              </div>
+            })}
+            {/* end price */}
+
             
 
-            {/* TODO: looping through the tickets */}
-            {/* price */}
-            <div className="col-12 col-md-6 col-lg-4">
-              <div className="price">
-                <div className="price__item price__item--first"><span>KODE_TIKET</span> <span>IDR 45.000</span></div>
-                <div className="price__item"><span>Judul Film : </span></div>
-                <div className="price__item"><span>Tanggal : </span></div>
-                <div className="price__item"><span>Keterangan Lainnya :</span></div>
-                <a href="#" className="price__btn">Show QR</a>
-              </div>
-            </div>
-            {/* end price */}
-            
+
           </div>
         </div>
       </div>
