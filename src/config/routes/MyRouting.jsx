@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router'
 import { ADMIN_ROUTES, MAIN_ROUTES } from './AllRoutes'
 import AdminMovie from "../../AdminMovie";
 import AdminVoucher from "../../AdminVoucher";
+import AdminJadwal from "../../AdminJadwal";
 // function ItemLi (props) {
 //   const { data } = props;
 //   if (data.children) return (
@@ -51,6 +52,7 @@ export default function MyRouting() {
       )) }
       <Route exact path="/masterMovie" element={<AdminMovie/>}></Route>
       <Route exact path="/masterVoucher" element={<AdminVoucher/>}></Route>
+      <Route exact path="/masterJadwal" element={<AdminJadwal/>}></Route>
     </Routes>
   )
 }
