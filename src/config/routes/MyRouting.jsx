@@ -1,9 +1,7 @@
 import { Fragment } from 'react'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, Navigate } from 'react-router'
 import { ADMIN_ROUTES, MAIN_ROUTES } from './AllRoutes'
-import AdminMovie from "../../AdminMovie";
-import AdminVoucher from "../../AdminVoucher";
-import AdminJadwal from "../../AdminJadwal";
+
 // function ItemLi (props) {
 //   const { data } = props;
 //   if (data.children) return (
@@ -37,6 +35,7 @@ export default function MyRouting() {
       )) }
 
       {/* Admin Routes */}
+      <Route path="/admin" element={<Navigate replace to="/admin/master-movie" />} />
       { ADMIN_ROUTES.map((route, idx) => (
         <Fragment key={idx}>
           { route.children ? (
@@ -50,9 +49,6 @@ export default function MyRouting() {
           ) }
         </Fragment>
       )) }
-      <Route exact path="/masterMovie" element={<AdminMovie/>}></Route>
-      <Route exact path="/masterVoucher" element={<AdminVoucher/>}></Route>
-      <Route exact path="/masterJadwal" element={<AdminJadwal/>}></Route>
     </Routes>
   )
 }

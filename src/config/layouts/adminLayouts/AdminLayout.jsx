@@ -31,6 +31,16 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       }),
       marginLeft: 0,
     }),
+    backgroundColor: 'white',
+    minHeight: '100vh',
+    "::-moz-selection": {
+      color: 'white',
+      background: '#42a5f5',
+    },
+    "::selection ": {
+      color: 'white',
+      background: '#42a5f5',
+    },
   }),
 );
 

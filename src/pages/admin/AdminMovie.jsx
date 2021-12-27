@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import "./App.css";
+import React, { useState, useEffect, Fragment } from "react";
+import { Box } from "@mui/system";
+import { GridActionsCellItem } from '@mui/x-data-grid'
+import { Alert, Button, Card, CardActions, CardContent, Collapse, Stack, TextField, Typography } from "@mui/material";
 import { query, where } from "firebase/firestore";
-import {db} from './config/auth/firebase'
+import {db} from '../../config/auth/firebase'
 import {
     collection,
     getDocs,
@@ -10,11 +12,25 @@ import {
     deleteDoc,
     doc,
 } from "firebase/firestore";
-import Modal from '@material-ui/core/Modal';
-import React from 'react';
+
+import AdminLayout from "../../config/layouts/adminLayouts/AdminLayout";
+import MyBreadCrumbs from "../../components/utils/MyBreadCrumbs";
+import MyDataGrid from "../../components/utils/MyDataGrid";
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn';
+import SaveIcon from '@mui/icons-material/Save';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+
+const B_ITEMS = [
+    { label: 'Admin' },
+    { label: 'Master Movie' },
+]
 
 function AdminMovie() {
-    const [open, setOpen] = React.useState(false);
+    const [IsLoading, setIsLoading] = useState(true);
+    const [OpenAddForm, setOpenAddForm] = useState(false)
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
@@ -34,10 +50,13 @@ function AdminMovie() {
     const usersCollectionRef = collection(db, "movie");
 
     const getMovies = async () => {
+        setIsLoading(true)
         const movieRef = collection(db, "movie");
         const q = query(movieRef, where("isActive", "==", 1),where("isDeleted", "==", 0));
         const data = await getDocs(q);
-        setMovies(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        setMovies(data.docs.map((doc, idx) => ({ ...doc.data(), id: doc.id, index: (idx + 1) })));
+        setIsLoading(false)
+        setOpenAddForm(false)
     };
 
     const addMovie = async () => {
@@ -55,16 +74,23 @@ function AdminMovie() {
         const movieDoc = doc(db,"movie",id);
         const newFields = {isActive:0};
         await updateDoc(movieDoc,newFields);
+        getMovies()
     }
     const hapus = async (id) =>{
         const movieDoc = doc(db,"movie",id);
         const newFields = {isDeleted:1};
         await updateDoc(movieDoc,newFields);
+        getMovies()
     }
 
-    const updateMovie = async () => {
-        const userDoc = doc(db, "movie", updateId);
-        const newFields = { title: updateTitle,synopsis:updateSynopsis,poster:updatePoster,duration:updateDuration };
+    const updateMovie = async (row) => {
+        const userDoc = doc(db, "movie", row.id);
+        const newFields = {
+            title: row.title,
+            synopsis: row.synopsis,
+            poster: row.poster,
+            duration: row.duration
+        };
         await updateDoc(userDoc, newFields);
         setUpdateId('');
         setUpdateTitle('');
@@ -88,9 +114,104 @@ function AdminMovie() {
         setOpen(true);
     };
 
+    const columns = [
+        { field: "index", type: "string", headerName: "No.", width: 20, align: 'center' },
+        {
+            field: "poster", type: "string", headerName: "Poster", width: 100, editable: true, align: 'center',
+            renderCell: (params) => (<Box component="img" src={params.value} sx={{ maxWidth: 100, maxHeight: 56 }} />)
+        },
+        { field: "title", type: "string", headerName: "Judul Film", width: 220, editable: true },
+        { field: "synopsis", type: "string", headerName: "Sinopsis", flex: 1, editable: true },
+        { field: "duration", type: "number", headerName: "Duration", width: 100, valueGetter: (params) => `${params.value} minutes`, editable: true },
+        {
+            field: 'actions', headerName: "Action", type: 'actions', width: 100,
+            getActions: (params) => [
+                <GridActionsCellItem
+                    color="error"
+                    icon={<DoNotDisturbOnIcon />}
+                    label="Non-aktifkan"
+                    showInMenu
+                    onClick={() => nonAktif(params.row.id)}
+                />,
+                <GridActionsCellItem
+                    color="error"
+                    icon={<DeleteIcon />}
+                    label="Hapus"
+                    showInMenu
+                    onClick={() => hapus(params.row.id)}
+                />,
+                <GridActionsCellItem
+                    color="error"
+                    icon={<SaveIcon />}
+                    label="Simpan"
+                    showInMenu
+                    onClick={() => updateMovie(params.row)}
+                />,
+            ],
+          },
+    ]
+
+    const InputJudulProps = {
+        fullWidth: true, size: "small", variant: "standard", label: "Judul Film",
+        value: newTitle, onChange: (e) => setNewTitle(e.target.value),
+    }
+    const InputSinopsisProps = {
+        fullWidth: true, size: "small", variant: "standard", label: "Sinopsis", multiline: true, minRows: 4,
+        value: newSynopsis, onChange: (e) => setNewSynopsis(e.target.value),
+    }
+    const InputLinkFotoProps = {
+        fullWidth: true, size: "small", variant: "standard", label: "Link Foto Poster",
+        value: newPoster, onChange: (e) => setNewPoster(e.target.value),
+    }
+    const InputDurationProps = {
+        fullWidth: true, size: "small", variant: "standard", label: "Duration", type: 'number',
+        value: newDuration, onChange: (e) => setNewDuration(e.target.value),
+    }
+
+    // console.log(movies)
+
     return (
-        <div className="App">
-            <input
+        <AdminLayout title={"Master Movie"} isLoading={IsLoading}>
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                <MyBreadCrumbs items={B_ITEMS} />
+                <Button
+                    variant="contained" startIcon={<AddOutlinedIcon/>}
+                    onClick={() => setOpenAddForm(!OpenAddForm)}
+                    >
+                    {OpenAddForm?'Close':'Add'}
+                </Button>
+            </Stack>
+
+            { !IsLoading ? (
+                <Fragment>
+                    <Collapse in={OpenAddForm} timeout="auto" unmountOnExit>
+                        <Typography variant="h5" sx={{ mb: 1 }}>
+                            {"Tambah Movie"}
+                        </Typography>
+                        <Card elevation={4} sx={{ mb: 4 }}>
+                            <CardContent>
+                                <Stack spacing={2}>
+                                    <TextField {...InputJudulProps}/>
+                                    <TextField {...InputSinopsisProps}/>
+                                    <TextField {...InputLinkFotoProps}/>
+                                    <TextField {...InputDurationProps}/>
+                                </Stack>
+                            </CardContent>
+                            <CardActions>
+                                <Button variant="contained" startIcon={<SaveIcon />} onClick={addMovie} sx={{ ml: 'auto' }} >
+                                    {"Simpan"}
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Collapse>
+        
+                    <Alert severity="info" sx={{ mb: 2 }}>{'Ketuk 2 kali field yang di-inginkan untuk di-ubah.'}</Alert>
+
+                    <MyDataGrid rows={movies} pageSize={10} columns={columns} density="comfortable" />
+                </Fragment>
+            ) : null }
+
+            {/* <input
                 placeholder="Judul Film"
                 onChange={(event) => {
                     setNewTitle(event.target.value);
@@ -120,8 +241,8 @@ function AdminMovie() {
                 value={newDuration}
             />
 
-            <button onClick={addMovie}> Add Movie</button>
-            {movies.map((movie) => {
+            <button onClick={addMovie}> Add Movie</button> */}
+            {/* {movies.map((movie) => {
                 return (
                     <div>
                         <img src={movie.poster} alt="Poster" style={{width:100}}/>
@@ -198,8 +319,8 @@ function AdminMovie() {
                         <button onClick={updateMovie}>Update</button>
                     </div>
                 </div>
-            </Modal>
-        </div>
+            </Modal> */}
+        </AdminLayout>
     );
 }
 
