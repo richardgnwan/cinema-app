@@ -1,12 +1,37 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Route, Routes, Outlet } from 'react-router'
+import {db} from './config/auth/firebase'
+import { query, where } from "firebase/firestore";
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 export default function MainHomePage() {
+  const jadwalCollectionRef = collection(db, "jadwal");
+  const [jadwal, setJadwal] = useState([]);
+  const [movie, setMovie] = useState([]);
+  const [cinema, setCinema] = useState([]);
+
+  const getMovie = async () => {
+    const movieRef = collection(db, "movie");
+    const q = query(movieRef, where("isActive", "==", 1),where("isDeleted", "==", 0));
+    const data = await getDocs(q);
+    setMovie(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+  useEffect(() => {
+    getMovie();
+  }, []);
+
+
   return (
     <MainLayout>
-
       {/* home */}
       <section className="home">
         {/* home bg */}
