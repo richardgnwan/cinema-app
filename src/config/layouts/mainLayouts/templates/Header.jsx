@@ -19,7 +19,7 @@ const Header = () => {
 
                   <li className="header__nav-item">
                     {/* <a className="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a> */}
-                    <Link to="/" className="dropdown-toggle header__nav-link">Home</Link>
+                    <Link to="/" className="dropdown-toggle header__nav-link" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</Link>
                   </li>
                   <li className="header__nav-item">
                     {/* <a href="tickets" className="header__nav-link">My Tickets</a> */}
@@ -28,6 +28,9 @@ const Header = () => {
                   <li className="header__nav-item">
                     {/* <a href="movies" className="header__nav-link">Movies</a> */}
                     <Link to="/movies" className="header__nav-link">Movies</Link>
+                  </li>
+                  <li className="header__nav-item">
+                    <Link to="/topup" className="header__nav-link">Topup</Link>
                   </li>
 
                 </ul>

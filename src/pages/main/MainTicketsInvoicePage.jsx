@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react'
-import './css/invoice.css';
+import classes from './css/invoice.module.css';
 
 const MainTicketsInvoicePage = () => {
-
+  document.body.style = 'background: white;';
   return (
-    <Fragment>
+    <div>
       <button onClick={() => window.print()}>PRINT</button>
-      <div className="invoice-box">
+      <div className={classes.invoicebox}>
         <table cellPadding={0} cellSpacing={0}>
-          <tbody><tr className="top">
+          <tbody><tr className={classes.top}>
             <td colSpan={2}>
               <table>
                 <tbody><tr>
-                  <td className="title">
+                  <td className={classes.title}>
                     <img src="https://www.sparksuite.com/images/logo.png" style={{ width: '100%', maxWidth: '300px' }} />
                   </td>
                   <td>
@@ -24,7 +24,7 @@ const MainTicketsInvoicePage = () => {
                 </tbody></table>
             </td>
           </tr>
-            <tr className="information">
+            <tr className={classes.information}>
               <td colSpan={2}>
                 <table>
                   <tbody><tr>
@@ -40,37 +40,37 @@ const MainTicketsInvoicePage = () => {
                   </tbody></table>
               </td>
             </tr>
-            <tr className="heading">
+            <tr className={classes.heading}>
               <td>Payment Method</td>
               <td>Check #</td>
             </tr>
-            <tr className="">
+            <tr>
               <td>Check</td>
               <td>1000</td>
             </tr>
-            <tr className="heading">
+            <tr className={classes.heading}>
               <td>Item</td>
               <td>Price</td>
             </tr>
-            <tr className="item">
+            <tr className={classes.item}>
               <td>Website design</td>
               <td>$300.00</td>
             </tr>
-            <tr className="item">
+            <tr className={classes.item}>
               <td>Hosting (3 months)</td>
               <td>$75.00</td>
             </tr>
-            <tr className="item last">
+            <tr className={classes.item}>
               <td>Domain name (1 year)</td>
               <td>$10.00</td>
             </tr>
-            <tr className="total">
+            <tr className={classes.total}>
               <td />
               <td>Total: $385.00</td>
             </tr>
           </tbody></table>
       </div>
-    </Fragment>
+    </div>
 
   )
 }
