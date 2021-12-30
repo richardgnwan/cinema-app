@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { Route, Routes, Outlet } from 'react-router'
-import {db} from './config/auth/firebase'
+import { db } from '../../config/auth/firebase'
 import { query, where } from "firebase/firestore";
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
