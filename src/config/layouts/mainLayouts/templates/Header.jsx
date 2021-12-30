@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -17,13 +18,16 @@ const Header = () => {
                 <ul className="header__nav">
 
                   <li className="header__nav-item">
-                    <a className="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
+                    {/* <a className="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a> */}
+                    <Link to="/" className="dropdown-toggle header__nav-link">Home</Link>
                   </li>
                   <li className="header__nav-item">
-                    <a href="tickets" className="header__nav-link">My Tickets</a>
+                    {/* <a href="tickets" className="header__nav-link">My Tickets</a> */}
+                    <Link to="/tickets" className="header__nav-link">My Tickets</Link>
                   </li>
                   <li className="header__nav-item">
-                    <a href="movies" className="header__nav-link">Movies</a>
+                    {/* <a href="movies" className="header__nav-link">Movies</a> */}
+                    <Link to="/movies" className="header__nav-link">Movies</Link>
                   </li>
 
                 </ul>
