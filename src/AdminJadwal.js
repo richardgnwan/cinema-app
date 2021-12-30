@@ -129,6 +129,7 @@ function AdminJadwal() {
                     <option value={cinema.id}>{cinema.cinemaName}</option>
                 ))}
             </select>
+
             <button onClick={addJadwal}> Add Jadwal</button>
             {jadwal.map((jadwal) => {
                 const movieIdx = movie.findIndex(movie=>movie.id==jadwal.idMovie);

@@ -10,9 +10,19 @@ import MainTicketsInvoicePage from '../../pages/main/MainTicketsInvoicePage';
 import MoviesDetailPage from '../../pages/main/MoviesDetailPage';
 import OrderPage from '../../pages/main/OrderPage';
 import MainTopupPage from '../../pages/main/MainTopupPage';
+import AdminMovie from '../../pages/admin/AdminMovie';
+import AdminVoucher from '../../pages/admin/AdminVoucher';
+import AdminJadwalPage from '../../pages/admin/AdminJadwalPage';
+// import AdminLogin from '../../pages/admin/AdminLogin';
 
 // ICONS
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import MovieIcon from '@mui/icons-material/Movie';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 export const MAIN_ROUTES = [
   { label: 'Home', path: '/', icon: <AccountBoxIcon/>, page: <MainHomePage/> },
@@ -27,5 +37,13 @@ export const MAIN_ROUTES = [
 ]
 
 export const ADMIN_ROUTES = [
-  { label: 'Admin', path: '/admin', index: true, icon: <AccountBoxIcon />, page: <AdminHomePage /> },
+  // { label: 'Admin', path: '/admin', index: true, icon: <AdminPanelSettingsIcon />, page: <AdminHomePage /> },
+  { label: 'Master', icon: <InventoryIcon />, children: [
+    { label: 'Movie', path: '/admin/master-movie', index: false, icon: <MovieIcon />, page: <AdminMovie /> },
+    { label: 'Jadwal', path: '/admin/master-jadwal', index: false, icon: <ScheduleIcon />, page: <AdminJadwalPage /> },
+    { label: 'Voucher', path: '/admin/master-voucher', index: false, icon: <LocalActivityIcon />, page: <AdminVoucher /> },
+  ] },
+  { label: 'Reports', icon: <SummarizeIcon />, children: [
+
+  ] },
 ]

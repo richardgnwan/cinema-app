@@ -88,9 +88,9 @@ export const theme = createTheme({
       },
     }
   },
-  shape: {
-    borderRadius: 8
-  },
+  // shape: {
+  //   borderRadius: 8
+  // },
   typography:{
     fontFamily: "'Roboto','Helvetica','Arial',sans-serif"
   }

@@ -7,6 +7,7 @@ export default function MoviesDetailPage() {
     const masuk = {
         justifyContent:"center"
     };
+
     return (
         <MainLayout>
             <section className="section details">
