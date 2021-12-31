@@ -58,6 +58,7 @@ export default function AdminJadwalPage() {
         const movieRef = collection(db, "movie");
         const q = query(movieRef, where("isActive", "==", 1),where("isDeleted", "==", 0));
         const data = await getDocs(q);
+        console.log(data.docs.map((doc) => ({...doc.data()})))
         setMovie(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
@@ -120,8 +121,9 @@ export default function AdminJadwalPage() {
     const columns = [
         { field: "index", type: "string", headerName: "No.", width: 20, align: 'center' },
         {
-            field: "judulMovie", type: "string", headerName: "Judul Movie", width: 240, 
-            valueGetter: (params) => { return movie[movie.findIndex(movie=>movie.id==params.row.idMovie)].title; }
+            field: "judulMovie", type: "string", headerName: "Judul Movie", width: 240,
+            valueGetter: (params) => { return (movie[movie.findIndex(movie=>movie.id==params.row.idMovie)]?.title ?? "This Movie is Deleted!") }
+            // valueGetter: (params) => { return JSON.stringify(movie[movie.findIndex(mov=>mov.id==params.row.idMovie)]); }
         },
         {
             field: "cinema", type: "string", headerName: "Cinema", width: 240, 
@@ -144,6 +146,8 @@ export default function AdminJadwalPage() {
             ],
           },
     ]
+    // {"title":"Spongebob","idMovie":"sdffg","isDeleted":0,"duration":123,"synopsis":"SpongeBob Squarepants","isActive":1,"poster":"https://yt3.ggpht.com/a/AATXAJyV31zVm1EJcIaWncG7N3iSwyV3Hcss6cW6jA=s900-c-k-c0xffffffff-no-rj-mo","id":"rKqZobvTBvtjUSPIquev"}
+    // {"idMovie":"123123","isDeleted":0,"poster":"https://th.bing.com/th/id/OIP.DX2ry7psxEgFZQZ5Go_3zwHaKZ?pid=ImgDet&rs=1","title":"Dora","duration":120,"isActive":1,"synopsis":"Petualangan Dora The Explorer","id":"LNUU92LBqwf3nfpLfwjl"}
 
     const InputMovieProps = {
         formControlProps: { fullWidth: true, size: 'small', variant: 'standard' },
