@@ -40,6 +40,7 @@ export default function AdminJadwalPage() {
     const jadwalCollectionRef = collection(db, "jadwal");
     const [jadwal, setJadwal] = useState([]);
     const [movie, setMovie] = useState([]);
+    const [movieShow, setMovieShow] = useState([]);
     const [cinema, setCinema] = useState([]);
 
     const getJadwal = async () => {
@@ -60,6 +61,10 @@ export default function AdminJadwalPage() {
         const data = await getDocs(q);
         console.log(data.docs.map((doc) => ({...doc.data()})))
         setMovie(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+        const q2 = query(movieRef);
+        const data2 = await getDocs(q2);
+        setMovieShow(data2.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
     const hitung = async () =>{
@@ -122,7 +127,7 @@ export default function AdminJadwalPage() {
         { field: "index", type: "string", headerName: "No.", width: 20, align: 'center' },
         {
             field: "judulMovie", type: "string", headerName: "Judul Movie", width: 240,
-            valueGetter: (params) => { return (movie[movie.findIndex(movie=>movie.id==params.row.idMovie)]?.title ?? "This Movie is Deleted!") }
+            valueGetter: (params) => { return (movieShow[movieShow.findIndex(movie=>movie.id==params.row.idMovie)]?.title ?? "This Movie is Deleted!") }
             // valueGetter: (params) => { return JSON.stringify(movie[movie.findIndex(mov=>mov.id==params.row.idMovie)]); }
         },
         {
