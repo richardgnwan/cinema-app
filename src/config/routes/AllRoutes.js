@@ -9,6 +9,7 @@ import MainTicketsQrPage from '../../pages/main/MainTicketsQrPage';
 import MainTicketsInvoicePage from '../../pages/main/MainTicketsInvoicePage';
 import MoviesDetailPage from '../../pages/main/MoviesDetailPage';
 import OrderPage from '../../pages/main/OrderPage';
+import PilihKursiPage from '../../pages/main/PilihKursiPage';
 import MainTopupPage from '../../pages/main/MainTopupPage';
 import AdminMovie from '../../pages/admin/AdminMovie';
 import AdminVoucher from '../../pages/admin/AdminVoucher';
@@ -34,6 +35,7 @@ export const MAIN_ROUTES = [
   { label: 'Tickets QR', path: '/tickets/:id_ticket/qr', icon: <AccountBoxIcon />, page: <MainTicketsQrPage /> },
   { label: 'Tickets Invoice', path: '/tickets/:id_ticket/invoice', icon: <AccountBoxIcon />, page: <MainTicketsInvoicePage /> },
   { label: 'Topup', path: '/topup', icon: <AccountBoxIcon />, page: <MainTopupPage /> },
+  { label: 'Pilih Kursi Page', path: '/pilih-kursi', icon: <AccountBoxIcon />, page: <PilihKursiPage /> },
 ]
 
 export const ADMIN_ROUTES = [

@@ -1,232 +1,87 @@
-import React, {useEffect, useState} from 'react'
-import { Route, Routes, Outlet } from 'react-router'
+import React, { useState } from 'react'
+import { Box, FormControlLabel } from '@mui/material'
+import { Button, Checkbox, Stack } from '@mui/material'
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
-import { query, where } from "firebase/firestore";
-import { db } from '../../config/auth/firebase'
-import {
-    collection,
-    getDocs,
-    addDoc,
-    updateDoc,
-    deleteDoc,
-    doc,
-    documentId
-} from "firebase/firestore";
+import { SEATS, seatsDivider, seatsMerger, seatsChoosenGetter } from '../../mock/seats'
 
+import WeekendIcon from '@mui/icons-material/Weekend';
+import WeekendOutlinedIcon from '@mui/icons-material/WeekendOutlined';
 
-export default function MoviesDetailPage() {
-    const [movies, setMovies] = useState([])
+export default function PilihKursiPage() {
+  const [seatList, setSeatList] = useState(seatsDivider(SEATS))
+  // console.log(seatList);
 
-    const getMovies = async () => {
-        const movieRef = collection(db, "movie");
-        const data = await getDocs(movieRef);
-        let list_movies = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  const handleChangeCheckbox = (e, y, x) => {
+    if (seatList[y][x].disabled) {
 
-        const jadwalRef= collection(db, "jadwal");
+    }
+    else {
+      let newList = [...seatList];
+      newList[y][x].value = e.target.checked;
+      newList[y][x].choosen = e.target.checked;
+      setSeatList(newList);
+    }
+  }
 
-        for (let index = 0; index < list_movies.length; index++) {
-            const movie = list_movies[index];
-            const queryJadwal = query(jadwalRef, where("idMovie", "==", movie.idMovie));
-            const dataJadwal = await getDocs(queryJadwal);
-            let jadwal = dataJadwal.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
-            list_movies[index].jadwal = jadwal;
+  const handleSubmit = () => {
+    console.log("Hasil All", seatsMerger(seatList))
+    console.log("Hasil Kepilih Aja", seatsChoosenGetter(seatList))
+  }
 
-            const queryMovie = query(movieRef, where(documentId(), "==", jadwal.idMovie));
-            const dataMovie = await getDocs(queryMovie);
-            let movies = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
-            console.log(movies);
-            console.log("masok");
-            list_movies[index].movie = movies
-        }
-        console.log(list_movies);
-        console.log("HHOHOHO");
-        setMovies(list_movies);
-    };
-
-    useEffect(() => {
-        getMovies();
-    }, [])
-
-    return (
-        <MainLayout>
-            <section className="section details">
-                {/* details background */}
-                <div className="details__bg" data-bg="img/home/home__bg.jpg" />
-                {/* end details background */}
-                {/* details content */}
-                <div className="container">
-                    <div className="row">
-                        {/* title */}
-                        <div className="col-12">
-                            <h1 className="details__title">I Dream in Another Language</h1>
-                        </div>
-                        {/* end title */}
-                        {/* content */}
-                        <div className="col-12 col-xl-6">
-                            <div className="card card--details">
-                                <div className="row">
-                                    {/* card cover */}
-                                    <div className="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-5">
-                                        <div className="card__cover">
-                                            <img src="img/covers/cover.jpg" alt="" />
-                                        </div>
-                                    </div>
-                                    {/* end card cover */}
-                                    {/* card content */}
-                                    <div className="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
-                                        <div className="card__content">
-                                            <div className="card__wrap">
-                                                <span className="card__rate"><i className="icon ion-ios-star" />8.4</span>
-                                                <ul className="card__list">
-                                                    <li>HD</li>
-                                                    <li>16+</li>
-                                                </ul>
-                                            </div>
-                                            <ul className="card__meta">
-                                                <li><span>Genre:</span> <a href="#">Action</a>
-                                                    <a href="#">Triler</a></li>
-                                                <li><span>Release year:</span> 2017</li>
-                                                <li><span>Running time:</span> 120 min</li>
-                                                <li><span>Country:</span> <a href="#">USA</a> </li>
-                                            </ul>
-                                            <div className="card__description card__description--details">
-                                                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* end card content */}
-                                </div>
-                            </div>
-                        </div>
-                        {/* end content */}
-                        {/* player */}
-                        <div className="col-12 col-xl-6">
-                            <video controls crossOrigin playsInline poster="../../../cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
-                                {/* Video files */}
-                                <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="video/mp4" size={576} />
-                                <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4" size={720} />
-                                <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4" size={1080} />
-                                <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4" type="video/mp4" size={1440} />
-                                {/* Caption files */}
-                                <track kind="captions" label="English" srcLang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" default />
-                                <track kind="captions" label="Français" srcLang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt" />
-                                {/* Fallback for browsers that don't support the <video> element */}
-                                <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
-                            </video>
-                        </div>
-                        {/* end player */}
-                    </div>
-                </div>
-                {/* end details content */}
-            </section>
-
-            <section className="content">
-            <div className="content__head">
-            <div className="container">
-            <div className="row">
+  return (
+    <MainLayout>
+      {/* page title */}
+      <section className="section section--first section--bg" data-bg="img/section/section.jpg">
+        <div className="container">
+          <div className="row">
             <div className="col-12">
-        {/* content title */}
-            <h2 className="content__title">Tickets Available</h2>
-        {/* end content title */}
-        {/* content tabs nav */}
-            <ul className="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
-            <li className="nav-item">
-            <a className="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Monday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Tuesday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Wednesday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">Thursday</a>
-            </li>
-            </ul>
-        {/* end content tabs nav */}
-        {/* content mobile tabs nav */}
-            <div className="content__mobile-tabs" id="content__mobile-tabs">
-            <div className="content__mobile-tabs-btn dropdown-toggle" role="navigation" id="mobile-tabs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <input type="button" defaultValue="New items" />
-            <span />
+              <div className="section__wrap">
+                {/* section title */}
+                <h2 className="section__title">{'Pilih Kursi'}</h2>
+                {/* end section title */}
+              </div>
             </div>
-            <div className="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
-            <ul className="nav nav-tabs" role="tablist">
-            <li className="nav-item"><a className="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">NEW RELEASES</a></li>
-            <li className="nav-item"><a className="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">MOVIES</a></li>
-            <li className="nav-item"><a className="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">TV SERIES</a></li>
-            <li className="nav-item"><a className="nav-link" id="4-tab" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">CARTOONS</a></li>
-            </ul>
+          </div>
+        </div>
+      </section>
+      {/* end page title */}
+      <div className="container">
+        <div className="row">
+          <div className="col-12" style={{ paddingTop: 20, paddingBottom: 20 }}>
+            <div className="my__box">
+              <Stack spacing={0.5}>
+                { seatList.map((row1, idx1) => (
+                  <Stack direction="row" justifyContent="space-between">
+                    { row1.map((row2, idx2) => (
+                      <FormControlLabel
+                        key={`${idx1}-${idx2}`}
+                        label={row2.label}
+                        labelPlacement="bottom"
+                        control={
+                          <Checkbox
+                            size="large"
+                            color="mainPink"
+                            checked={row2.value}
+                            // disabled={row2.disabled}
+                            icon={<WeekendOutlinedIcon sx={{ color: 'plainwhite.main' }} />}
+                            checkedIcon={<WeekendIcon sx={{ color: row2.choosen?"mainPink.light":"inherit" }} />}
+                            onChange={(e) => handleChangeCheckbox(e, idx1, idx2)}
+                          />
+                        }
+                        sx={{ color: 'white' }}
+                      />
+                    )) }
+                  </Stack>
+                )) }
+              </Stack>
             </div>
-            </div>
-        {/* end content mobile tabs nav */}
-            </div>
-            </div>
-            </div>
-            </div>
-            <div className="container">
-        {/* content tabs */}
-            <div className="tab-content" id="myTabContent">
-            <div className="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
-            <div className="row">
-        {/* card */}
-            <div className="col-sm-12">
-            <div className="card card--list">
-            <div className="row">
-
-            <div className="col-sm-12 ">
-            <div className="card__content">
-            {/*<h3 className="card__title"><a href="#">I Dream in Another Language</a></h3>*/}
-
-            <div className="card__wrap">
-
-                <ul className="card__list">
-                    {/* price */}
-                    {movies.map((movie) => {
-                        return <div className="col-12 col-md-6 col-lg-4" key={movie.id}>
-                            <div className="price">
-                                <div className="price__item"><span>Tanggal : {movie.jadwal.tanggal}</span></div>
-                                <div className="price__item"><span>Jam Main : {movie.jadwal.jamAwal}</span></div>
-                            </div>
-                        </div>
-                    })}
-                    {/* end price */}
-                        {/*<li className="card__cover">10:00</li>*/}
-                        {/*<li className="card__cover">10:30</li>*/}
-                        {/*<li className="card__cover">11:00</li>*/}
-                        {/*<li className="card__cover">11:30</li>*/}
-                        {/*<li className="card__cover">12:00</li>*/}
-                        {/*<li className="card__cover">12:30</li>*/}
-
-                </ul>
-
-            </div>
-            <div className="card__wrap">
-                <ul className="card__list">
-                    <li className="card__cover">10:00</li>
-                    <li className="card__cover">10:30</li>
-                    <li className="card__cover">11:00</li>
-                    <li className="card__cover">11:30</li>
-                    <li className="card__cover">12:00</li>
-                    <li className="card__cover">12:30</li>
-                </ul>
-            </div>
-
-            </div>
-            </div>
-            </div>
-            </div>
-            </div>
-        {/* end card */}
-            </div>
-            </div>
-            </div>
-        {/* end content tabs */}
-            </div>
-            </section>
-
-        </MainLayout>
-
-    )
+            <Box sx={{ mt: 2, textAlign: 'end' }}>
+              <Button variant="contained" color="mainPink" onClick={handleSubmit}>{'Submit'}</Button>
+            </Box>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  )
 }

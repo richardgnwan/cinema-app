@@ -1,7 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
+import { query, where } from "firebase/firestore";
+import { db } from '../../config/auth/firebase'
+import {
+  BrowserRouter as Router,
+  useParams
+} from "react-router-dom";
+
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  documentId
+} from "firebase/firestore";
 
 const MainTicketsQrPage = () => {
+
+  const { id_ticket } = useParams();
+  const [ticket, setTicket] = useState()
+
+  const horderRef = collection(db, "horder");
+  const jadwalRef = collection(db, "jadwal");
+  const movieRef = collection(db, "movie");
+
+  const getTicket = async () => {
+    const queryHorder = query(horderRef, where(documentId(), "==", id_ticket));
+    
+    const dataHorder = await getDocs(queryHorder);
+    let horder = dataHorder.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+
+    const queryJadwal = query(jadwalRef, where(documentId(), "==", horder.idJadwal));
+    const dataJadwal = await getDocs(queryJadwal);
+    let jadwal = dataJadwal.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+    horder.jadwal = jadwal
+
+    const queryMovie = query(movieRef, where(documentId(), "==", jadwal.idMovie));
+    const dataMovie = await getDocs(queryMovie);
+    let movie = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+    horder.movie = movie
+
+    setTicket(horder);
+    console.log(horder);
+  }
+
+  useEffect(() => {
+    getTicket();
+  }, [])
+
   return (
     <MainLayout>
       <section className="section details">
@@ -13,7 +61,7 @@ const MainTicketsQrPage = () => {
           <div className="row">
             {/* title */}
             <div className="col-12">
-              <h1 className="details__title">JUDUL FILM - QR Code</h1>
+              <h1 className="details__title">{ticket && ticket.movie.title} - QR Code</h1>
             </div>
             {/* end title */}
             {/* content */}

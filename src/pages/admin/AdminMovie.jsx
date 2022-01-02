@@ -54,6 +54,7 @@ function AdminMovie() {
         const movieRef = collection(db, "movie");
         const q = query(movieRef, where("isActive", "==", 1),where("isDeleted", "==", 0));
         const data = await getDocs(q);
+        console.log("Data Movie", data.docs.map((doc, idx) => ({ ...doc.data(), id: doc.id, index: (idx + 1) })));
         setMovies(data.docs.map((doc, idx) => ({ ...doc.data(), id: doc.id, index: (idx + 1) })));
         setIsLoading(false)
         setOpenAddForm(false)
