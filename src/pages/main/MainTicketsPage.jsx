@@ -45,7 +45,7 @@ export default function MainTicketsPage() {
       let movie = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
       list_tickets[index].movie = movie
     }
-    console.log(list_tickets);
+    // console.log(list_tickets);
 
     setTickets(list_tickets);
   };
