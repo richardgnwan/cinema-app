@@ -65,7 +65,7 @@ const MainTicketsInvoicePage = () => {
   useEffect(() => {
     getTicket();
   }, [])
-  
+
   // const jadwalRef = collection(db, "jadwal");
   // const movieRef = collection(db, "movie");
 
@@ -77,14 +77,14 @@ const MainTicketsInvoicePage = () => {
           <tbody><tr className={classes.top}>
             <td colSpan={2}>
               <table>
-                <tbody><tr>
-                  <td className={classes.title}>
-                    <img src="https://www.sparksuite.com/images/logo.png" style={{ width: '100%', maxWidth: '300px' }} />
-                  </td>
-                  <td>
-                    Invoice Code:{id_ticket}<br />
-                    {/* Created: January 1, 2015 <br /> */}
-                  </td>
+                <tbody>
+                  <tr>
+                    <td className={classes.title}>
+                      <img src="https://www.sparksuite.com/images/logo.png" style={{ width: '100%', maxWidth: '300px' }} />
+                    </td>
+                    <td>
+                      Invoice Code:{id_ticket}<br />
+                    </td>
                 </tr>
                 </tbody></table>
             </td>
@@ -119,19 +119,19 @@ const MainTicketsInvoicePage = () => {
               <td>Detail</td>
               <td>Seats</td>
             </tr>
-            
+
             {ticket && ticket.dorder.map((item, index) => (
               <tr className={classes.item} key={index}>
-                <td>{item.nomorKursi}</td>``
+                <td>{item.nomorKursi}</td>
                 <td>IDR {numberWithCommas(item.hargaTiket)}</td>
               </tr>
             ))}
-            
+
             {/* <tr className={classes.item}>
               <td>{ticket && ticket.movie.title}</td>
               <td>Jumalah 2 tiket</td>
             </tr> */}
-            
+
             <tr className={classes.total}>
               <td />
               <td>Total: {ticket && 'IDR ' + numberWithCommas(ticket.totalBayar)}</td>
