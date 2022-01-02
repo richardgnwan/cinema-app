@@ -36,6 +36,12 @@ export const theme = createTheme({
     orange: {
       main: '#ff7f02'
     },
+    mainPink: {
+      dark: '#b23d43',
+      main: '#ff5860',
+      light: '#ff55a5',
+      contrastText: '#fff'
+    },
     oldPrimary: {
       dark: '#1565c0',
       light: '#42a5f5',
