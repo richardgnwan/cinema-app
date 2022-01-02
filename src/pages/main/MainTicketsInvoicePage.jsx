@@ -28,13 +28,13 @@ const MainTicketsInvoicePage = () => {
   const [ticket, setTicket] = useState()
 
   const horderRef = collection(db, "horder");
+  const dorderRef = collection(db, "dorder");
   const jadwalRef = collection(db, "jadwal");
   const movieRef = collection(db, "movie");
   const usersRef = collection(db, "users");
 
   const getTicket = async () => {
     const queryHorder = query(horderRef, where(documentId(), "==", id_ticket));
-    
     const dataHorder = await getDocs(queryHorder);
     let horder = dataHorder.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
 
@@ -52,6 +52,11 @@ const MainTicketsInvoicePage = () => {
     const dataUser = await getDocs(queryUser);
     let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
     horder.user = user
+
+    const queryDorder = query(dorderRef, where('idHorder', "==", id_ticket));
+    const dataDorder = await getDocs(queryDorder);
+    let dorder = dataDorder.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    horder.dorder = dorder
 
     setTicket(horder);
     console.log(horder);
@@ -90,6 +95,9 @@ const MainTicketsInvoicePage = () => {
                   <tbody><tr>
                     <td>
                       Cinema App, Inc.<br />
+                      {ticket && ticket.movie.title}<br />
+                      {ticket && ticket.jadwal.tanggal} Starts at {ticket && ticket.jadwal.jamAwal} - {ticket && ticket.jadwal.jamAkhir}<br />
+                      {ticket && ticket.totalKursi} Seat/Seats<br />
                     </td>
                     <td>
                       {ticket && ticket.user.name}<br />
@@ -111,13 +119,22 @@ const MainTicketsInvoicePage = () => {
               <td>Detail</td>
               <td>Seats</td>
             </tr>
-            <tr className={classes.item}>
+            
+            {ticket && ticket.dorder.map((item, index) => (
+              <tr className={classes.item} key={index}>
+                <td>{item.nomorKursi}</td>``
+                <td>IDR {numberWithCommas(item.hargaTiket)}</td>
+              </tr>
+            ))}
+            
+            {/* <tr className={classes.item}>
               <td>{ticket && ticket.movie.title}</td>
               <td>Jumalah 2 tiket</td>
-            </tr>
+            </tr> */}
+            
             <tr className={classes.total}>
               <td />
-              <td>Total: $385.00</td>
+              <td>Total: {ticket && 'IDR ' + numberWithCommas(ticket.totalBayar)}</td>
             </tr>
           </tbody></table>
       </div>
