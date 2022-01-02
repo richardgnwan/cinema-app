@@ -35,12 +35,12 @@ export default function MainHomePage() {
       {/* home */}
       <section className="home">
         {/* home bg */}
-        <div className="owl-carousel home__bg">
-          <div className="item home__cover" data-bg="img/home/home__bg.jpg" />
-          <div className="item home__cover" data-bg="img/home/home__bg2.jpg" />
-          <div className="item home__cover" data-bg="img/home/home__bg3.jpg" />
-          <div className="item home__cover" data-bg="img/home/home__bg4.jpg" />
-        </div>
+        {/*<div className="owl-carousel home__bg">*/}
+        {/*  <div className="item home__cover" data-bg="img/home/home__bg.jpg" />*/}
+        {/*  <div className="item home__cover" data-bg="img/home/home__bg2.jpg" />*/}
+        {/*  <div className="item home__cover" data-bg="img/home/home__bg3.jpg" />*/}
+        {/*  <div className="item home__cover" data-bg="img/home/home__bg4.jpg" />*/}
+        {/*</div>*/}
         {/* end home bg */}
         <div className="container">
           <div className="row">

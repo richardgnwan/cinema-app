@@ -32,8 +32,15 @@ export default function MoviesDetailPage() {
             let jadwal = dataJadwal.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
             list_movies[index].jadwal = jadwal;
 
+            const queryMovie = query(movieRef, where(documentId(), "==", jadwal.idMovie));
+            const dataMovie = await getDocs(queryMovie);
+            let movies = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+            console.log(movies);
+            console.log("masok");
+            list_movies[index].movie = movies
         }
         console.log(list_movies);
+        console.log("HHOHOHO");
         setMovies(list_movies);
     };
 
