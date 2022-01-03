@@ -20,7 +20,6 @@ function numberWithCommas(x) {
 }
 
 export default function MainTicketsPage() {
-
   const [tickets, setTickets] = useState([])
 
   const getTickets = async () => {
