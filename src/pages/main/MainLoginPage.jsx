@@ -3,6 +3,7 @@ import { Route, Routes, Outlet } from 'react-router'
 import { db } from '../../config/auth/firebase'
 import { query, where } from "firebase/firestore";
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../hooks/auth'
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 import {
@@ -15,6 +16,12 @@ import {
 } from "firebase/firestore";
 
 export default function MainHomePage() {
+  const { userNow, LoginEmail, LoginGoogle, Logout } = useAuth()
+
+  const doLogin = async () => {
+    // await LoginEmail('budi@gmail.com', '123456')
+    // await Logout()
+  }
 
   return (
     <div className="sign section--bg" data-bg="img/section/section.jpg">
@@ -37,7 +44,7 @@ export default function MainHomePage() {
                   <input id="remember" name="remember" type="checkbox" defaultChecked="checked" />
                   <label htmlFor="remember">Remember Me</label>
                 </div> */}
-                <button className="sign__btn" type="button">Sign in</button>
+                <button className="sign__btn" type="button" onClick={doLogin}>Sign in</button>
                 {/* <span className="sign__text">Don't have an account? <a href="signup.html">Sign up!</a></span> */}
                 <br />
                 <Link to="/"><span className="sign__text"><a>Back to Home</a></span></Link>
