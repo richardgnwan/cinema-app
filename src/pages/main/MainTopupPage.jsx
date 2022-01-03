@@ -34,6 +34,9 @@ const MainTopupPage = () => {
     } else if(voucher.isUsed == 1) {
       setStatus(-3);
       return;
+    } else if(voucher.isDeleted == 1) {
+      setStatus(-4);
+      return;
     }
 
     updateBalance(voucher);
@@ -78,6 +81,8 @@ const MainTopupPage = () => {
     message = "Kode voucher tidak boleh kosong";
   } else if (status === -3) {
     message = "Kode voucher sudah digunakan";
+  } else if (status === -4) {
+    message = "Kode voucher sudah dihapus";
   } else if (status === 1) {
     message = "Topup berhasil";
   }
