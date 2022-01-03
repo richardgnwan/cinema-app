@@ -40,10 +40,10 @@ const Header = () => {
                   <button className="header__search-btn" type="button">
                     <i className="icon ion-ios-search" />
                   </button>
-                  <a href="signin.html" className="header__sign-in">
+                  <Link to="/login" className="header__sign-in">
                     <i className="icon ion-ios-log-in" />
                     <span>sign in</span>
-                  </a>
+                  </Link>
                 </div>
                 {/* end header auth */}
                 {/* header menu btn */}

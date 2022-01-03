@@ -4,6 +4,7 @@
 // PAGES
 import AdminHomePage from '../../pages/admin/AdminHomePage';
 import MainHomePage from '../../pages/main/MainHomePage';
+import MainLoginPage from '../../pages/main/MainLoginPage';
 import MainTicketsPage from '../../pages/main/MainTicketsPage';
 import MainTicketsQrPage from '../../pages/main/MainTicketsQrPage';
 import MainTicketsInvoicePage from '../../pages/main/MainTicketsInvoicePage';
@@ -27,6 +28,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 
 export const MAIN_ROUTES = [
   { label: 'Home', path: '/', icon: <AccountBoxIcon/>, page: <MainHomePage/> },
+  { label: 'Login', path: '/login', icon: <AccountBoxIcon/>, page: <MainLoginPage/> },
   { label: 'Tickets', path: '/tickets', icon: <AccountBoxIcon />, page: <MainTicketsPage /> },
   // { label: 'Tickets QR', path: '/tickets/qr', icon: <AccountBoxIcon />, page: <MainTicketsQrPage /> },
   // { label: 'Tickets Invoice', path: '/tickets/invoice', icon: <AccountBoxIcon />, page: <MainTicketsInvoicePage /> },
