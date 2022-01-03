@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Route, Routes, Outlet } from 'react-router'
 import { db } from '../../config/auth/firebase'
 import { query, where } from "firebase/firestore";
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/auth'
+import { useNavigate } from 'react-router-dom';
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 import {
@@ -15,12 +16,34 @@ import {
   doc,
 } from "firebase/firestore";
 
-export default function MainHomePage() {
+export default function MainLoginPage() {
+  const navigate = useNavigate()
+  
+  const emailRef = useRef("")
+  const passwordRef = useRef("")
+  
+  
   const { userNow, LoginEmail, LoginGoogle, Logout } = useAuth()
 
   const doLogin = async () => {
-    // await LoginEmail('budi@gmail.com', '123456')
-    // await Logout()
+    
+    const email = emailRef.current.value
+    const password = passwordRef.current.value
+
+    if (email == '' || password == '') {
+      alert('Email dan password harus diisi')
+      return
+    }
+
+    
+    const response = await LoginEmail(email, password)
+    
+    if(response.user == null) {
+      alert('Credential tidak ditemukan')
+      return
+    }
+    alert('Sukses login')
+    navigate('/')
   }
 
   return (
@@ -30,24 +53,24 @@ export default function MainHomePage() {
           <div className="col-12">
             <div className="sign__content">
               {/* authorization form */}
-              <form action="#" className="sign__form">
+              <form className="sign__form">
                 <a href="index.html" className="sign__logo">
                   <img src="img/logo.svg" alt="" />
                 </a>
                 <div className="sign__group">
-                  <input type="text" className="sign__input" placeholder="Email" />
+                  <input ref={emailRef} type="text" className="sign__input" placeholder="Email" />
                 </div>
                 <div className="sign__group">
-                  <input type="password" className="sign__input" placeholder="Password" />
+                  <input ref={passwordRef} type="password" className="sign__input" placeholder="Password" />
                 </div>
                 {/* <div className="sign__group sign__group--checkbox">
                   <input id="remember" name="remember" type="checkbox" defaultChecked="checked" />
                   <label htmlFor="remember">Remember Me</label>
                 </div> */}
                 <button className="sign__btn" type="button" onClick={doLogin}>Sign in</button>
-                {/* <span className="sign__text">Don't have an account? <a href="signup.html">Sign up!</a></span> */}
+                <span className="sign__text">Don't have an account? <Link to="/register">Sign up!</Link></span>
                 <br />
-                <Link to="/"><span className="sign__text"><a>Back to Home</a></span></Link>
+                <Link to="/"><span className="sign__text">Back to Home</span></Link>
               </form>
               {/* end authorization form */}
             </div>

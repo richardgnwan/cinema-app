@@ -5,6 +5,7 @@
 import AdminHomePage from '../../pages/admin/AdminHomePage';
 import MainHomePage from '../../pages/main/MainHomePage';
 import MainLoginPage from '../../pages/main/MainLoginPage';
+import MainRegisterPage from '../../pages/main/MainRegisterPage';
 import MainTicketsPage from '../../pages/main/MainTicketsPage';
 import MainTicketsQrPage from '../../pages/main/MainTicketsQrPage';
 import MainTicketsInvoicePage from '../../pages/main/MainTicketsInvoicePage';
@@ -29,15 +30,14 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 export const MAIN_ROUTES = [
   { label: 'Home', path: '/', icon: <AccountBoxIcon/>, page: <MainHomePage/> },
   { label: 'Login', path: '/login', icon: <AccountBoxIcon/>, page: <MainLoginPage/> },
+  { label: 'Register', path: '/register', icon: <AccountBoxIcon/>, page: <MainRegisterPage/> },
   { label: 'Tickets', path: '/tickets', icon: <AccountBoxIcon />, page: <MainTicketsPage /> },
-  // { label: 'Tickets QR', path: '/tickets/qr', icon: <AccountBoxIcon />, page: <MainTicketsQrPage /> },
-  // { label: 'Tickets Invoice', path: '/tickets/invoice', icon: <AccountBoxIcon />, page: <MainTicketsInvoicePage /> },
   { label: 'Movies', path: '/movies/:id', icon: <AccountBoxIcon />, page: <MoviesDetailPage/> },
   { label: 'Order', path: '/order', icon: <AccountBoxIcon />, page: <OrderPage/> },
   { label: 'Tickets QR', path: '/tickets/:id_ticket/qr', icon: <AccountBoxIcon />, page: <MainTicketsQrPage /> },
   { label: 'Tickets Invoice', path: '/tickets/:id_ticket/invoice', icon: <AccountBoxIcon />, page: <MainTicketsInvoicePage /> },
   { label: 'Topup', path: '/topup', icon: <AccountBoxIcon />, page: <MainTopupPage /> },
-  { label: 'Pilih Kursi Page', path: '/pilih-kursi', icon: <AccountBoxIcon />, page: <PilihKursiPage /> },
+  { label: 'Pilih Kursi Page', path: '/pilih-kursi/:id_jadwal', icon: <AccountBoxIcon />, page: <PilihKursiPage /> },
 ]
 
 export const ADMIN_ROUTES = [

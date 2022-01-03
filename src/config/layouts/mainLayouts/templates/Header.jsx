@@ -1,7 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../../../hooks/auth'
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate()
+  const { userNow, Logout } = useAuth()
+
+
+  const doLogout = async () => {
+    await Logout()
+    navigate('/login')
+  }
+
   return (
     <header className="header">
       <div className="header__wrap">
@@ -26,10 +37,6 @@ const Header = () => {
                     <Link to="/tickets" className="header__nav-link">My Tickets</Link>
                   </li>
                   <li className="header__nav-item">
-                    {/* <a href="movies" className="header__nav-link">Movies</a> */}
-                    <Link to="/movies" className="header__nav-link">Movies</Link>
-                  </li>
-                  <li className="header__nav-item">
                     <Link to="/topup" className="header__nav-link">Topup</Link>
                   </li>
 
@@ -40,10 +47,18 @@ const Header = () => {
                   <button className="header__search-btn" type="button">
                     <i className="icon ion-ios-search" />
                   </button>
-                  <Link to="/login" className="header__sign-in">
+                  
+                  {userNow && <button onClick={doLogout} className="header__sign-in">
+                    <i className="icon ios-ion-md-log-out" />
+                    <span>sign out</span>
+                  </button>}
+
+                  {userNow == null && <Link to="/login" className="header__sign-in">
                     <i className="icon ion-ios-log-in" />
                     <span>sign in</span>
-                  </Link>
+                  </Link>}
+
+
                 </div>
                 {/* end header auth */}
                 {/* header menu btn */}
