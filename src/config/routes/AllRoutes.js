@@ -16,6 +16,7 @@ import MainTopupPage from '../../pages/main/MainTopupPage';
 import AdminMovie from '../../pages/admin/AdminMovie';
 import AdminVoucher from '../../pages/admin/AdminVoucher';
 import AdminJadwalPage from '../../pages/admin/AdminJadwalPage';
+import ReportAdmin from "../../pages/admin/ReportAdmin";
 // import AdminLogin from '../../pages/admin/AdminLogin';
 
 // ICONS
@@ -26,6 +27,7 @@ import MovieIcon from '@mui/icons-material/Movie';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 export const MAIN_ROUTES = [
   { label: 'Home', path: '/', icon: <AccountBoxIcon/>, page: <MainHomePage/> },
@@ -48,6 +50,6 @@ export const ADMIN_ROUTES = [
     { label: 'Voucher', path: '/admin/master-voucher', index: false, icon: <LocalActivityIcon />, page: <AdminVoucher /> },
   ] },
   { label: 'Reports', icon: <SummarizeIcon />, children: [
-
+      { label: 'Penjualan', path: '/admin/report-admin', index: false, icon: <AssessmentIcon />, page: <ReportAdmin /> },
   ] },
 ]

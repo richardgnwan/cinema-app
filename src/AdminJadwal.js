@@ -60,7 +60,6 @@ function AdminJadwal() {
         setNewJamAkhir(rangkai);
     }
 
-
     const getCinema = async () => {
         const cinemaRef = collection(db, "cinema");
         const q = query(cinemaRef);
