@@ -14,10 +14,12 @@ import {
     documentId
 } from "firebase/firestore";
 import {useParams} from "react-router-dom";
+import {Link} from "@material-ui/core";
 
 
 export default function MoviesDetailPage() {
     const [movies, setMovies] = useState([])
+    const [jadwals, setJadwal] = useState([])
     const { id } = useParams();
 
 
@@ -34,8 +36,7 @@ export default function MoviesDetailPage() {
         let jadwal = data2.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         movie.jadwal = jadwal;
         setMovies(movie);
-        console.log(movie);
-        console.log(jadwal);
+        setJadwal(jadwal);
     };
 
     useEffect(() => {
@@ -63,7 +64,7 @@ export default function MoviesDetailPage() {
                                     {/* card cover */}
                                     <div className="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-5">
                                         <div className="card__cover">
-                                            <img src="img/covers/cover.jpg" alt="" />
+                                            <img src={movies && movies.poster} alt="" />
                                         </div>
                                     </div>
                                     {/* end card cover */}
@@ -71,13 +72,12 @@ export default function MoviesDetailPage() {
                                     <div className="col-12 col-sm-8 col-md-8 col-lg-9 col-xl-7">
                                         <div className="card__content">
                                             <ul className="card__meta">
-                                                <li><span>Genre:</span> <a href="#">Action</a>
-                                                    <a href="#">Triler</a></li>
-                                                <li><span>Running time:</span> 120 min</li>
+                                                <li><span><img src="https://go-tix.id/images/time-icon-pink.svg" style={{ opacity: 0.5}}/></span> {movies && movies.duration} menit</li>
+
+                                                <li style={{marginTop:40}}> Sinopsis: </li>
+                                                <li> {movies && movies.synopsis} </li>
                                             </ul>
-                                            <div className="card__description card__description--details">
-                                                {movies && movies.synopsis}
-                                            </div>
+
                                         </div>
                                     </div>
                                     {/* end card content */}
@@ -106,6 +106,7 @@ export default function MoviesDetailPage() {
                 {/* end details content */}
             </section>
 
+
             <section className="content">
             <div className="content__head">
             <div className="container">
@@ -115,20 +116,20 @@ export default function MoviesDetailPage() {
             <h2 className="content__title">Tickets Available</h2>
         {/* end content title */}
         {/* content tabs nav */}
-            <ul className="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
-            <li className="nav-item">
-            <a className="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Monday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Tuesday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Wednesday</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false">Thursday</a>
-            </li>
-            </ul>
+
+
+        {/*<ul className="nav nav-tabs content__tabs" id="content__tabs" role="tablist">*/}
+        {/*    {jadwals.map((j) => {*/}
+        {/*        return(*/}
+        {/*            <div className="col-12 col-md-6 col-lg-4" key={j.id}>*/}
+        {/*                <li className="nav-item" style={{width:100}} >*/}
+        {/*                    <a className="nav-link active" data-toggle="tab" href="" role="tab"  aria-selected="true">{j.tanggal}</a>*/}
+        {/*                </li>*/}
+        {/*            </div>*/}
+        {/*            )*/}
+        {/*    })}*/}
+        {/*</ul>*/}
+
         {/* end content tabs nav */}
         {/* content mobile tabs nav */}
             <div className="content__mobile-tabs" id="content__mobile-tabs">
@@ -189,12 +190,18 @@ export default function MoviesDetailPage() {
             </div>
             <div className="card__wrap">
                 <ul className="card__list">
-                    <li className="card__cover">10:00</li>
-                    <li className="card__cover">10:30</li>
-                    <li className="card__cover">11:00</li>
-                    <li className="card__cover">11:30</li>
-                    <li className="card__cover">12:00</li>
-                    <li className="card__cover">12:30</li>
+                    {jadwals && jadwals.map((j) => {
+                        return(
+                            <Link to={'/pilih-kursi/'+ j.id}>
+                                {/*<div key={j.id}>*/}
+                                    <div className="price">
+                                        <li className="card__cover" style={{width:150}}>{j.tanggal} {j.jamAwal}</li>
+                                    </div>
+                                {/*</div>*/}
+                            </Link>
+
+                        )
+                    })}
                 </ul>
             </div>
 
