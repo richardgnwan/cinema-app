@@ -117,3 +117,5 @@ export const seatsChoosenGetter = (seats) => {
   let result = newSeats.filter(item => item.choosen)
   return result;
 }
+
+//seat wher jadwal == id_jadwal

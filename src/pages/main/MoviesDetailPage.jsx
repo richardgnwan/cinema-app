@@ -14,7 +14,7 @@ import {
     documentId
 } from "firebase/firestore";
 import {useParams} from "react-router-dom";
-import {Link} from "@material-ui/core";
+import { Link } from 'react-router-dom'
 
 
 export default function MoviesDetailPage() {
@@ -189,18 +189,18 @@ export default function MoviesDetailPage() {
 
             </div>
             <div className="card__wrap">
-                {/*<ul className="card__list">*/}
-                <Link to='/tickets'>asdf</Link>
-                {jadwals && jadwals.map((j) => {
-                    return(
-                        <div  key={j.id}>
-                            <button className="card__cover" style={{width:150}}>{j.tanggal} {j.jamAwal}</button>
-                        </div>
+                <ul className="card__list">
+                    {jadwals && jadwals.map((j) => {
+                        return(
+                            <Link to={'/pilih-kursi/'+ j.id}>
+                                <div key={j.id}>
+                                    <li className="card__cover" style={{marginRight:20}}>{j.tanggal} {j.jamAwal}</li>
+                                </div>
+                            </Link>
 
-
-                    )
-                })}
-                {/*</ul>*/}
+                        )
+                    })}
+                </ul>
             </div>
 
             </div>
