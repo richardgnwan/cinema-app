@@ -22,7 +22,7 @@ const MainTopupPage = () => {
 
   const addTopup = async (kode) => {
     // Check if voucher is valid
-    const queryVoucher = query(voucherRef, where(documentId(), "==", kode));
+    const queryVoucher = query(voucherRef, where('kodeUnik', "==", kode));
     const dataVoucher = await getDocs(queryVoucher);
     let voucher = dataVoucher.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0] ?? null;
 
@@ -33,6 +33,9 @@ const MainTopupPage = () => {
       return;
     } else if(voucher.isUsed == 1) {
       setStatus(-3);
+      return;
+    } else if(voucher.isDeleted == 1) {
+      setStatus(-4);
       return;
     }
 
@@ -78,6 +81,8 @@ const MainTopupPage = () => {
     message = "Kode voucher tidak boleh kosong";
   } else if (status === -3) {
     message = "Kode voucher sudah digunakan";
+  } else if (status === -4) {
+    message = "Kode voucher sudah dihapus";
   } else if (status === 1) {
     message = "Topup berhasil";
   }
@@ -91,7 +96,7 @@ const MainTopupPage = () => {
           <span className="faq__text">Maximum 20 Character</span>
 
           <div className="sign__group">
-            <input maxLength={20} ref={kodeRef} type="text" className="sign__input" placeholder="Kode Topup" style={{ width: '560px' }} />
+            <input ref={kodeRef} type="text" className="sign__input" placeholder="Kode Topup" style={{ width: '560px' }} />
           </div>
 
           <button onClick={submitHandler} className="sign__btn" type="button">Topup</button>

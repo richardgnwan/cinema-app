@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@mui/system';
-import { Avatar, Badge, IconButton, Toolbar, Typography } from '@mui/material'
+import { Badge, IconButton, Toolbar, Typography } from '@mui/material'
 
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';

@@ -10,6 +10,7 @@ import { theme } from './config/theme';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { AuthProvider } from './hooks/auth';
+import { CartProvider } from './hooks/cart';
 
 
 ReactDOM.render(
@@ -18,9 +19,11 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         {/* <CssBaseline /> */}
         <AuthProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <CartProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </CartProvider>
         </AuthProvider>
       </ThemeProvider>
     </LocalizationProvider>

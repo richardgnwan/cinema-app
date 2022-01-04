@@ -1,9 +1,89 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes, Outlet } from 'react-router'
+import { useCart } from '../../hooks/cart'
+import { useAuth } from '../../hooks/auth'
+import { query, where } from "firebase/firestore";
+import { db } from '../../config/auth/firebase'
+import { useNavigate } from 'react-router-dom';
+
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  documentId
+} from "firebase/firestore";
+
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 
 export default function MoviesDetailPage() {
+    const navigate = useNavigate()
+    const { seats, idJadwal, resetCurrentSeats } = useCart()
+    const { userNow } = useAuth()
+
+    const [jadwal, setJadwal] = useState()
+
+    const getData = async () => {
+        const jadwalRef = collection(db, "jadwal");
+        const queryJadwal = query(jadwalRef, where(documentId(), "==", idJadwal));
+        const dataJadwal = await getDocs(queryJadwal);
+        let jadwal = dataJadwal.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+        
+        
+        const movieRef = collection(db, "movie");
+        const queryMovie = query(movieRef, where(documentId(), "==", jadwal.idMovie));
+        const dataMovie = await getDocs(queryMovie);
+        let movie = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+        jadwal.movie = movie
+
+        console.log(jadwal);
+        setJadwal(jadwal)
+    }
+
+    const doKonfirmasi = async () => {
+        
+        let hargaTiket = 35000;
+        let totalBayar = seats.length * hargaTiket;
+        
+        const horderRef = collection(db, "horder");
+        const data = {
+            idJadwal: idJadwal,
+            isPrinted: false,
+            totalBayar: totalBayar,
+            totalKursi: seats.length,
+            email: userNow.email,
+        }
+        const response = await addDoc(horderRef, data)
+        console.log(response.id);
+
+        if (response && response.id) {
+            const dorderRef = collection(db, "dorder");
+            const dataDetail = seats.map((seat) => ({
+                idHorder: response.id,
+                idJadwal: idJadwal,
+                nomorKursi: seat,
+                hargaTiket: hargaTiket,
+            }))
+            
+            for (let i = 0; i < dataDetail.length; i++) {
+                const dtDetail = dataDetail[i];
+                await addDoc(dorderRef, dtDetail)
+            }
+        }
+        alert('Konfirmasi Berhasil')
+        resetCurrentSeats()
+        navigate('/')
+
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+
     const masuk = {
         justifyContent:"center"
     };
@@ -29,27 +109,25 @@ export default function MoviesDetailPage() {
                                     {/* card cover */}
                                     <div className="col-sm-12" >
                                         <div className="card__cover">
-                                            <img src="img/covers/cover.jpg" alt="" className= "center" style={{width:200, height:"auto"}}/>
+                                            <img src={jadwal && jadwal.movie.poster} alt="" className= "center" style={{width:200, height:"auto"}}/>
                                         </div>
                                     </div>
                                     {/* end card cover */}
                                     {/* card content */}
                                     <div className="col-sm-12" >
                                         <div className="card__content" >
-                                            <h3 className="card__title" style={{fontSize:30, textAlign:"center"}}><a href="#">I Dream in Another Language</a></h3>
+                                            <h3 className="card__title" style={{fontSize:30, textAlign:"center"}}><a href="#">{jadwal && jadwal.movie.title}</a></h3>
                                             <ul className="card__meta" style={{fontSize:20, textAlign:"center", display:"flex" ,justifyContent:"center"}}>
-                                                <li ><span>Studio:</span>
-                                                    <a href="#" style={{fontSize:20}}>Studio 1</a>
-                                                </li>
-                                                <li><span>Date & Time:</span> Mon 20 December 20:30</li>
-                                                <li><span>Duration:</span> 120 minutes </li>
-                                                <li><span>Quantity:</span> 1 </li>
+                                                <li><span>Date:</span> {jadwal && jadwal.tanggal }</li>
+                                                <li><span>Time:</span> {jadwal && jadwal.jamAwal + ' - ' + jadwal.jamAkhir }</li>
+                                                <li><span>Duration:</span> {jadwal && jadwal.movie.duration} minutes </li>
+                                                <li><span>Quantity:</span> {seats && seats.length} </li>
                                             </ul>
                                             <div style={{marginLeft: 450, marginTop: 20}}>
-                                                <a href="signin.html" className="header__sign-in">
+                                                <button onClick={doKonfirmasi} className="header__sign-in">
                                                     <i className="icon ion-ios-log-in" />
                                                     <span>Konfirmasi</span>
-                                                </a>
+                                                </button>
                                             </div>
                                             {/*<div className="card__description card__description--details">*/}
                                             {/*    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.*/}

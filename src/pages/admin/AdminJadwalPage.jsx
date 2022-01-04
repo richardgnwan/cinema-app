@@ -164,7 +164,7 @@ export default function AdminJadwalPage() {
         options: movie,
     }
     const InputTanggalProps = {
-        fullWidth: true, size: "small", variant: "standard", label: "Tanggal (DD/MM/YYYY)",
+        fullWidth: true, size: "small", variant: "standard", label: "Tanggal (DD-MM-YYYY)",
         value: newTanggal, onChange: (e) => setNewTanggal(e.target.value),
     }
     const InputJamTayangProps = {
