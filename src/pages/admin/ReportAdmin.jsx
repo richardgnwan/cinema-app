@@ -83,7 +83,7 @@ function ReportAdmin() {
     };
 
     const InputTanggalProps = {
-        label: "Basic example", disableFuture: true,
+        label: "Pilih Tanggal", disableFuture: true,
         renderInput: (params) => <TextField {...params} fullWidth />,
         value: ChoosenDate,
         onChange: (newValue) => {
