@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 import { query, where, increment, setDoc } from "firebase/firestore";
 import { db } from '../../config/auth/firebase'
+import { useAuth } from '../../hooks/auth'
 import {
   collection,
   getDocs,
@@ -16,9 +17,12 @@ const MainTopupPage = () => {
   const [status, setStatus] = useState(0)
   const kodeRef = useRef("")
 
+  // User Auth
+  const { userNow } = useAuth()
+
   // FIREBASE
   const voucherRef = collection(db, "voucher");
-  const userRef = collection(db, "user");
+  const userRef = collection(db, "users");
 
   const addTopup = async (kode) => {
     // Check if voucher is valid
@@ -43,7 +47,13 @@ const MainTopupPage = () => {
   };
 
   const updateBalance = async (voucher) => {
-    const id_user = "83dAnYdcCd0siPfw46YI";
+    
+    // get id_user from user
+    const queryUser = query(userRef, where('email', "==", userNow.email));
+    const dataUser = await getDocs(queryUser);
+    let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0] ?? null;
+    console.log(user);
+    const id_user = user.id;
     
     // Update status voucher
     const voucherDoc = doc(db, "voucher", voucher.id);
@@ -93,7 +103,7 @@ const MainTopupPage = () => {
       <div className="sign__content">
         {/* registration form */}
         <form action="#" className="sign__form" style={{ width: '700px' }}>
-          <span className="faq__text">Maximum 20 Character</span>
+          {/* <span className="faq__text">Maximum 20 Character</span> */}
 
           <div className="sign__group">
             <input ref={kodeRef} type="text" className="sign__input" placeholder="Kode Topup" style={{ width: '560px' }} />

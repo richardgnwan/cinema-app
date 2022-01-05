@@ -3,6 +3,7 @@ import { Route, Routes, Outlet } from 'react-router'
 import { query, where } from "firebase/firestore";
 import { db } from '../../config/auth/firebase'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../hooks/auth'
 import {
   collection,
   getDocs,
@@ -22,10 +23,13 @@ function numberWithCommas(x) {
 export default function MainTicketsPage() {
   const [tickets, setTickets] = useState([])
 
+  // User Auth
+  const { userNow } = useAuth()
+
   const getTickets = async () => {
     const horderRef = collection(db, "horder");
-
-    const data = await getDocs(horderRef);
+    const queryHorder = query(horderRef, where('email', "==", userNow.email));
+    const data = await getDocs(queryHorder);
     let list_tickets = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
     const jadwalRef = collection(db, "jadwal");

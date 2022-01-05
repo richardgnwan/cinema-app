@@ -48,7 +48,7 @@ const MainTicketsInvoicePage = () => {
     let movie = dataMovie.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
     horder.movie = movie
 
-    const queryUser = query(usersRef, where('username', "==", horder.username));
+    const queryUser = query(usersRef, where('email', "==", horder.email));
     const dataUser = await getDocs(queryUser);
     let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
     horder.user = user
@@ -100,8 +100,7 @@ const MainTicketsInvoicePage = () => {
                       {ticket && ticket.totalKursi} Seat/Seats<br />
                     </td>
                     <td>
-                      {ticket && ticket.user.name}<br />
-                      Age : {ticket && ticket.user.age}
+                      Email : {ticket && ticket.user.email}
                     </td>
                   </tr>
                   </tbody></table>

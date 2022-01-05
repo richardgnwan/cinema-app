@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Box } from '@mui/system';
-import { Badge, IconButton, Toolbar, Typography } from '@mui/material'
+import { IconButton, Toolbar, Typography } from '@mui/material'
 
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import MailIcon from '@mui/icons-material/Mail';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import AdminAccountMenu from './AdminAccountMenu';
@@ -39,7 +39,7 @@ export default function AdminAppbarToolbar(props) {
       </Typography>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+        {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
@@ -52,7 +52,7 @@ export default function AdminAppbarToolbar(props) {
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
           </Badge>
-        </IconButton>
+        </IconButton> */}
         {/* <IconButton
           size="large" edge="end" color="inherit"
           // aria-controls={menuId}

@@ -36,6 +36,11 @@ const Header = () => {
   }, [userNow]);
 
 
+  // if userNow is null then redirect to login
+  if (!userNow) {
+    navigate('/login')
+  }
+
 
   const doLogout = async () => {
     await Logout()
