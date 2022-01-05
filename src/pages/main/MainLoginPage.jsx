@@ -70,7 +70,6 @@ export default function MainLoginPage() {
                 <button className="sign__btn" type="button" onClick={doLogin}>Sign in</button>
                 <span className="sign__text">Don't have an account? <Link to="/register">Sign up!</Link></span>
                 <br />
-                <Link to="/"><span className="sign__text">Back to Home</span></Link>
               </form>
               {/* end authorization form */}
             </div>

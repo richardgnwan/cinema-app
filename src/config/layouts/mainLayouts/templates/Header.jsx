@@ -1,11 +1,40 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../../../hooks/auth'
 import { useNavigate } from 'react-router-dom';
-
+import {collection, documentId, getDocs, query, where} from "firebase/firestore";
+import {db} from "../../../auth/firebase";
+import MyNumberFormat from "../../../../utils/numberFormater";
 const Header = () => {
   const navigate = useNavigate()
   const { userNow, Logout } = useAuth()
+  const [saldo, setSaldo] = useState()
+
+  // console.log(userNow)
+
+  const getSaldo = async () =>{
+    const userRef = collection(db, "users");
+    const queryUser = query(userRef, where("email", "==", userNow.email));
+    const data = await getDocs(queryUser);
+    let loggedUser = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+    console.log(loggedUser);
+    setSaldo(loggedUser.balance);
+    //
+    // const jadwalRef= collection(db, "jadwal");
+    // const queryJadwal = query(jadwalRef, where("idMovie", "==", id));
+    // const data2 = await getDocs(queryJadwal);
+    // let jadwal = data2.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // movie.jadwal = jadwal;
+    // setMovies(movie);
+    // setJadwal(jadwal);
+  }
+
+  useEffect(() => {
+    if(userNow != null){
+      getSaldo();
+    }
+  }, [userNow]);
+
 
 
   const doLogout = async () => {
@@ -44,10 +73,7 @@ const Header = () => {
                 {/* end header nav */}
                 {/* header auth */}
                 <div className="header__auth">
-                  <button className="header__search-btn" type="button">
-                    <i className="icon ion-ios-search" />
-                  </button>
-                  
+                  <p style={{color:"white", marginTop:10}}>"Saldo: " + <MyNumberFormat value={saldo}/></p>
                   {userNow && <button onClick={doLogout} className="header__sign-in">
                     <i className="icon ios-ion-md-log-out" />
                     <span>sign out</span>
