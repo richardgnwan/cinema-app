@@ -7,6 +7,11 @@ const Header = () => {
   const navigate = useNavigate()
   const { userNow, Logout } = useAuth()
 
+  // if userNow is null then redirect to login
+  if (!userNow) {
+    navigate('/login')
+  }
+
 
   const doLogout = async () => {
     await Logout()
