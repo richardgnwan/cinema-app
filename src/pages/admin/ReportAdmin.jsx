@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import {db} from '../../config/auth/firebase'
 import { query, where } from "firebase/firestore";
 import { GridActionsCellItem } from '@mui/x-data-grid'
-import { Alert, Button, Card, CardActions, CardContent, Collapse, Stack, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Avatar, Button, Card, CardActions, CardContent, CardHeader, Collapse, Divider, Grid, Stack, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@mui/material";
 
 import {
     collection,
@@ -20,6 +20,9 @@ import MyBreadCrumbs from "../../components/utils/MyBreadCrumbs";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import { DatePicker } from "@mui/lab";
+import { MyFormater } from "../../utils/dateFormater";
+import MyNumberFormat from "../../utils/numberFormater";
 
 const B_ITEMS = [
     { label: 'Admin' },
@@ -27,112 +30,17 @@ const B_ITEMS = [
 ]
 
 function ReportAdmin() {
-    /*const [IsLoading, setIsLoading] = useState(true);
-    const [OpenAddForm, setOpenAddForm] = useState(false)
-    const [open, setOpen] = useState(false);
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const [newKodeUnik, setNewKodeUnik] = useState("");
-    const [newSaldo, setNewSaldo] = useState(0);
-
-    const [voucher, setVoucher] = useState([]);
-    const voucherCollectionRef = collection(db, "voucher");
-
-    const [updateKodeUnik, setUpdateKodeUnik] = useState("");
-    const [updateSaldo, setUpdateSaldo] = useState(0);
-    const [updateId, setUpdateId] = useState("");
-
-    const getVoucher = async () => {
-        setIsLoading(true)
-        const voucherRef = collection(db, "voucher");
-        const q = query(voucherRef, where("isDeleted", "==", 0),where("isUsed", "==", 0));
-        const data = await getDocs(q);
-        setVoucher(data.docs.map((doc, idx) => ({ ...doc.data(), id: doc.id, index: (idx + 1) })));
-        setIsLoading(false)
-        setOpenAddForm(false)
-    };
-
-    const addVoucher = async () => {
-        await addDoc(voucherCollectionRef, { kodeUnik: newKodeUnik, saldo : Number(newSaldo),
-            isUsed:Number(0),isDeleted:Number(0) });
-        setNewKodeUnik('');
-        setNewSaldo('');
-        getVoucher();
-    };
-
-    const hapus = async (id) =>{
-        const voucherDoc = doc(db,"voucher",id);
-        const newFields = {isDeleted:1};
-        await updateDoc(voucherDoc,newFields);
-        getVoucher();
-    }
-
-    const handleOpen = async (id,kodeUnik,saldo) => {
-        setUpdateId(id);
-        setUpdateKodeUnik(kodeUnik);
-        setUpdateSaldo(saldo);
-        setOpen(true);
-    };
-
-    const updateVoucher = async (row) => {
-        const userDoc = doc(db, "voucher", row.id);
-        const newFields = { kodeUnik: row.kodeUnik, saldo: row.saldo };
-        await updateDoc(userDoc, newFields);
-        setUpdateId('');
-        setUpdateKodeUnik('');
-        setUpdateSaldo('');
-        handleClose();
-        getVoucher();
-    };
-
-    useEffect(() => {
-        getVoucher();
-    }, []);
-
-    const columns = [
-        { field: "index", type: "string", headerName: "No.", width: 20, align: 'center' },
-        { field: "kodeUnik", type: "string", headerName: "Kode Unik", width: 300, editable: true },
-        { field: "saldo", type: "number", headerName: "Saldo", width: 200, editable: true },
-        {
-            field: 'actions',
-            headerName: "Action",
-            type: 'actions',
-            width: 120,
-            getActions: (params) => [
-                <GridActionsCellItem
-                    color="primary"
-                    icon={<SaveIcon />}
-                    label="Save"
-                    onClick={() => updateVoucher(params.row)}
-                />,
-                <GridActionsCellItem
-                    color="error"
-                    icon={<DeleteIcon />}
-                    label="Delete"
-                    onClick={() => hapus(params.row.id)}
-                    // showInMenu
-                />,
-            ],
-        },
-    ]*/
-
-    /*const InputKodeUnikProps = {
-        fullWidth: true, size: "small", variant: "standard", label: "Kode Unik",
-        value: newKodeUnik, onChange: (e) => setNewKodeUnik(e.target.value),
-    }
-    const InputSaldoProps = {
-        fullWidth: true, size: "small", variant: "standard", label: "Saldo", type: 'number',
-        value: newSaldo, onChange: (e) => setNewSaldo(e.target.value),
-    }*/
-    const [newTanggal, setNewTanggal] = useState("");
+    const [IsLoading, setIsLoading] = useState(true);
     const [jadwal, setJadwal] = useState([]);
     const [movie, setMovie] = useState([]);
     const [cinema, setCinema] = useState([]);
     const [totalAll, setTotalAll] = useState(0);
+    
+    const [newTanggal, setNewTanggal] = useState("");
+    const [ChoosenDate, setChoosenDate] = useState(new Date());
+
     const getJadwal = async () => {
+        setIsLoading(true)
         getMovie();
         getCinema();
         const jadwalRef = collection(db, "jadwal");
@@ -158,6 +66,8 @@ function ReportAdmin() {
         }
         setTotalAll(totalHariIni);
         setJadwal(listJadwal);
+        // console.log(jadwal)
+        setIsLoading(false)
     };
     const getMovie = async () => {
         const movieRef = collection(db, "movie");
@@ -172,9 +82,115 @@ function ReportAdmin() {
         setCinema(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
+    const InputTanggalProps = {
+        label: "Basic example", disableFuture: true,
+        renderInput: (params) => <TextField {...params} fullWidth />,
+        value: ChoosenDate,
+        onChange: (newValue) => {
+            setChoosenDate(newValue)
+            setNewTanggal(MyFormater(newValue, "dd-MM-yyyy"))
+        },
+    }
+    const ButtonMakeReportProps = {
+        variant: "contained", fullWidth: true, size: "small",
+        onClick: getJadwal,
+    }
+
     return (
-        <div>
-            Tanggal : <input
+        <AdminLayout title={"Master Voucher"} isLoading={IsLoading}>
+            <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                <MyBreadCrumbs items={B_ITEMS} />
+            </Stack>
+
+            <Grid container spacing={2} sx={{ pb: 8 }}>
+                <Grid item xs={12} md={3}>
+                    <Card elevation={3} sx={{ mb: 2 }}>
+                        <CardHeader
+                            title="Filter Report"
+                        />
+                        <Divider sx={{ mx: 1, borderColor: 'primary.main' }} />
+                        <CardContent>
+                            <DatePicker {...InputTanggalProps} />
+                        </CardContent>
+                        <CardActions>
+                            <Button {...ButtonMakeReportProps}>
+                                {'Buat Report'}
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={9}>
+                    <Stack spacing={2}>
+                        { jadwal.length <= 0 ? (
+                            <Alert severity="info">{'Belum ada transaksi yang terjadi di hari ini.'}</Alert>
+                        ) : (
+                            <Alert severity="success">
+                                <AlertTitle>{'Total Pendapatan Hari Ini'}</AlertTitle>
+                                <Typography variant="h5">
+                                    <MyNumberFormat value={totalAll} />
+                                </Typography>
+                            </Alert>
+                        ) }
+                        { jadwal.map((jadwal, idx) => {
+                            const movieIdx = movie.findIndex(movie=>movie.id==jadwal.idMovie);
+                            const cinemaIdx = cinema.findIndex(cinema=>cinema.id==jadwal.idCinema);
+                            const currMovie = movie[movieIdx];
+                            const currCinema = cinema[cinemaIdx];
+                            // console.log({ movie: currMovie, cinema: currCinema})
+
+                            return (
+                                <Card key={idx} elevation={3}>
+                                    <CardHeader
+                                        avatar={<Avatar alt={currMovie.id} src={currMovie.poster} />}
+                                        title={<Typography variant="h6">{currMovie.title}</Typography>}
+                                        subheader={MyFormater(new Date(jadwal.tanggal), "dd MMMM yyyy")}
+                                    />
+                                    <Divider />
+                                    <CardContent sx={{ p: 0.5 }}>
+                                        <Table size="small">
+                                            <TableBody sx={{ 'td, th': { border: 0 } }}>
+                                                <TableRow>
+                                                    <TableCell variant="head">{'Cinema'}</TableCell>
+                                                    <TableCell align="right">{currCinema.cinemaName}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell variant="head">{'Jam Tayang'}</TableCell>
+                                                    <TableCell align="right">{`${jadwal.jamAwal} - ${jadwal.jamAkhir}`}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell variant="head">{'Jumlah Kursi Terjual'}</TableCell>
+                                                    <TableCell align="right">{`${jadwal.totalKursi} kursi`}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell variant="head">{'Harga Tiket'}</TableCell>
+                                                    <TableCell align="right">
+                                                        <MyNumberFormat value={35000} />
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Stack direction="row" justifyContent="space-between" sx={{ width: '100%', p: 1 }}>
+                                            <Typography fontSize={18} fontWeight="bold">{'Pendapatan dari Jadwal ini'}</Typography>
+                                            <Typography fontSize={18} fontWeight="bold">
+                                                <MyNumberFormat value={jadwal.total} />
+                                            </Typography>
+                                        </Stack>
+                                    </CardActions>
+                                    {/* <h1>Judul Film: {judulFilm}</h1>
+                                    <h1>Cinema: {namaCinema}</h1>
+                                    <h1>Jam Tayang : {jadwal.jamAwal} - {jadwal.jamAkhir}</h1>
+                                    <h1>Jumlah Kursi Terjual : {jadwal.totalKursi}</h1>
+                                    <h1>Pendapatan dari Jadwal ini : {jadwal.total}</h1> */}
+                                </Card>
+                            );
+                        })}
+                    </Stack>
+                </Grid>
+            </Grid>
+
+            {/* Tanggal : <input
                             placeholder="Tanggal (DD-MM-YYYY)"
                             onChange={(event) => {
                                 setNewTanggal(event.target.value);
@@ -187,8 +203,8 @@ function ReportAdmin() {
                 }}
             >
                 Buat Report
-            </button>
-            {jadwal.map((jadwal) => {
+            </button> */}
+            {/* {jadwal.map((jadwal) => {
                 const movieIdx = movie.findIndex(movie=>movie.id==jadwal.idMovie);
                 const judulFilm = movie[movieIdx].title;
                 const cinemaIdx = cinema.findIndex(cinema=>cinema.id==jadwal.idCinema);
@@ -203,8 +219,8 @@ function ReportAdmin() {
                     </div>
                 );
             })}
-            Total Pendapatan Hari Ini : {totalAll}
-        </div>
+            Total Pendapatan Hari Ini : {totalAll} */}
+        </AdminLayout>
     );
 }
 
