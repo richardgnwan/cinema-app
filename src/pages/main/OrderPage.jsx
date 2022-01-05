@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Route, Routes, Outlet } from 'react-router'
 import { useCart } from '../../hooks/cart'
 import { useAuth } from '../../hooks/auth'
-import { query, where } from "firebase/firestore";
+import { query, where, increment } from "firebase/firestore";
 import { db } from '../../config/auth/firebase'
 import { useNavigate } from 'react-router-dom';
 
@@ -47,6 +47,23 @@ export default function MoviesDetailPage() {
         
         let hargaTiket = 35000;
         let totalBayar = seats.length * hargaTiket;
+
+        // check if user has enough money
+        if (userNow.balance < totalBayar) {
+            alert("Maaf, uang anda tidak cukup untuk melakukan pembelian tiket")
+            return
+        }
+        
+        // get id_user from user
+        const userRef = collection(db, "users");
+        const queryUser = query(userRef, where('email', "==", userNow.email));
+        const dataUser = await getDocs(queryUser);
+        let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0] ?? null;
+        const id_user = user.id;
+
+        const userDoc = doc(db, "users", id_user);
+        const userField = { balance: increment(-totalBayar) };
+        await updateDoc(userDoc, userField);
         
         const horderRef = collection(db, "horder");
         const data = {
