@@ -5,7 +5,7 @@ import { Button, Checkbox, Stack } from '@mui/material'
 import { useCart } from '../../hooks/cart'
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
-import { SEATS, seatsDivider, seatsMerger, seatsChoosenGetter } from '../../mock/seats'
+import { resetSeats, SEATS, seatsDivider, seatsMerger, seatsChoosenGetter } from '../../mock/seats'
 
 import WeekendIcon from '@mui/icons-material/Weekend';
 import WeekendOutlinedIcon from '@mui/icons-material/WeekendOutlined';
@@ -28,7 +28,7 @@ import {
 export default function PilihKursiPage() {
   let navigate = useNavigate();
   const { id_jadwal } = useParams()
-  const [seatList, setSeatList] = useState(seatsDivider(SEATS))
+  const [seatList, setSeatList] = useState([...seatsDivider(resetSeats())])
 
   const { setCurrentSeats } = useCart()
 

@@ -48,17 +48,19 @@ export default function MoviesDetailPage() {
         let hargaTiket = 35000;
         let totalBayar = seats.length * hargaTiket;
 
+        const userRef = collection(db, "users");
+        const queryUser = query(userRef, where('email', "==", userNow.email));
+        const dataUser = await getDocs(queryUser);
+        let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0] ?? null;
+        
         // check if user has enough money
-        if (userNow.balance < totalBayar) {
+        if (user.balance < totalBayar) {
             alert("Maaf, uang anda tidak cukup untuk melakukan pembelian tiket")
             return
         }
         
         // get id_user from user
-        const userRef = collection(db, "users");
-        const queryUser = query(userRef, where('email', "==", userNow.email));
-        const dataUser = await getDocs(queryUser);
-        let user = dataUser.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0] ?? null;
+        
         const id_user = user.id;
 
         const userDoc = doc(db, "users", id_user);
