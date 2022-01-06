@@ -138,11 +138,12 @@ function ReportAdmin() {
                             const currCinema = cinema[cinemaIdx];
                             // console.log({ movie: currMovie, cinema: currCinema})
 
+                            if (!currMovie) return null;
                             return (
                                 <Card key={idx} elevation={3}>
                                     <CardHeader
-                                        avatar={<Avatar alt={currMovie.id} src={currMovie.poster} />}
-                                        title={<Typography variant="h6">{currMovie.title}</Typography>}
+                                        avatar={<Avatar alt={currMovie?.id} src={currMovie?.poster} />}
+                                        title={<Typography variant="h6">{currMovie?.title}</Typography>}
                                         subheader={MyFormater(new Date(jadwal.tanggal), "dd MMMM yyyy")}
                                     />
                                     <Divider />
