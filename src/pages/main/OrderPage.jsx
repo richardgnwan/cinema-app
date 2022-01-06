@@ -18,6 +18,7 @@ import {
 
 
 import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
+import {seatsChoosenGetter} from "../../mock/seats";
 
 export default function MoviesDetailPage() {
     const navigate = useNavigate()
@@ -25,6 +26,9 @@ export default function MoviesDetailPage() {
     const { userNow } = useAuth()
 
     const [jadwal, setJadwal] = useState()
+    const [saldo, setSaldo] = useState()
+
+
 
     const getData = async () => {
         const jadwalRef = collection(db, "jadwal");
@@ -43,14 +47,38 @@ export default function MoviesDetailPage() {
         setJadwal(jadwal)
     }
 
+    const getSaldo = async () =>{
+        const userRef = collection(db, "users");
+        const queryUser = query(userRef, where("email", "==", userNow.email));
+        const data = await getDocs(queryUser);
+        let loggedUser = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))[0];
+        console.log(loggedUser);
+        setSaldo(loggedUser.balance);
+        //
+        // const jadwalRef= collection(db, "jadwal");
+        // const queryJadwal = query(jadwalRef, where("idMovie", "==", id));
+        // const data2 = await getDocs(queryJadwal);
+        // let jadwal = data2.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        // movie.jadwal = jadwal;
+        // setMovies(movie);
+        // setJadwal(jadwal);
+    }
+
+    useEffect(() => {
+        if(userNow != null){
+            getSaldo();
+        }
+    }, [userNow]);
+
     const doKonfirmasi = async () => {
         
         let hargaTiket = 35000;
         let totalBayar = seats.length * hargaTiket;
 
         // check if user has enough money
-        if (userNow.balance < totalBayar) {
+        if (saldo < totalBayar) {
             alert("Maaf, uang anda tidak cukup untuk melakukan pembelian tiket")
+
             return
         }
         

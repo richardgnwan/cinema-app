@@ -78,7 +78,7 @@ const Header = () => {
                 {/* end header nav */}
                 {/* header auth */}
                 <div className="header__auth">
-                  <p style={{color:"white", marginTop:10}}>"Saldo: " + <MyNumberFormat value={saldo}/></p>
+                  <p style={{color:"white", marginTop:10}}>Saldo:  <MyNumberFormat value={saldo}/></p>
                   {userNow && <button onClick={doLogout} className="header__sign-in">
                     <i className="icon ios-ion-md-log-out" />
                     <span>sign out</span>

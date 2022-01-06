@@ -28,9 +28,9 @@ import {
 export default function PilihKursiPage() {
   let navigate = useNavigate();
   const { id_jadwal } = useParams()
-  const [seatList, setSeatList] = useState(seatsDivider(SEATS))
+  const [seatList, setSeatList] = useState(seatsDivider(Object.assign({}, SEATS)))
 
-  const { setCurrentSeats } = useCart()
+  const { setCurrentSeats,resetCurrentSeats } = useCart()
 
 
   const handleChangeCheckbox = (e, y, x) => {
@@ -72,7 +72,7 @@ export default function PilihKursiPage() {
     let list_nomorKursi = list_dorder.map((dorder) => dorder.nomorKursi)
 
     console.log("list_nomorKursi", list_nomorKursi);
-    
+    console.log(seatList);
     // Set disabled for choosen chairs
     let newList = [...seatList];
     list_nomorKursi.forEach(kursi => {
@@ -85,7 +85,9 @@ export default function PilihKursiPage() {
   }
 
   useEffect(() => {
-    initChair()
+    resetCurrentSeats();
+    initChair();
+
   }, [])
 
 

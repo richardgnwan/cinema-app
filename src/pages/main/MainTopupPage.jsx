@@ -68,6 +68,7 @@ const MainTopupPage = () => {
 
     setStatus(1)
     kodeRef.current.value = "";
+    window.location.reload()
   }
 
 
