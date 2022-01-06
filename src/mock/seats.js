@@ -90,6 +90,13 @@ export const SEATS = [
   { id: 80, label: 'J8', choosen: false, value: false, disabled: false },
 ]
 
+export const resetSeats = () => {
+  const newSeats = SEATS.map(seat => {
+    return { ...seat, choosen: false, value: false, disabled: false }
+  })
+  return newSeats
+}
+
 export const seatsDivider = (seats = [], width = 8, height = 10) => {
   let result = [];
   for (let h = 0; h < height; h++) {
