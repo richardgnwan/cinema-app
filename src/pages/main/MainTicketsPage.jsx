@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Route, Routes, Outlet } from 'react-router'
 import { query, where } from "firebase/firestore";
 import { db } from '../../config/auth/firebase'
-import { Link } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useAuth } from '../../hooks/auth'
 import {
   collection,
@@ -25,6 +25,7 @@ export default function MainTicketsPage() {
 
   // User Auth
   const { userNow } = useAuth()
+
 
   const getTickets = async () => {
     const horderRef = collection(db, "horder");
@@ -95,8 +96,12 @@ export default function MainTicketsPage() {
                   <div className="price__item"><span>Total Kursi : {ticket.totalKursi}</span></div>
                   <div className="price__item"><span>Tanggal : {ticket.jadwal.tanggal}</span></div>
                   <div className="price__item"><span>Jam Main : {ticket.jadwal.jamAwal}</span></div>
+                  <div className="price__item"><span>Status : {ticket.isPrinted ?'Expired':'Aktif'}</span></div>
                   <a target="_blank" href={'/tickets/' + ticket.id + '/invoice'} className="price__btn">Invoice</a>
-                  <Link to={'/tickets/' + ticket.id + '/qr'} className="price__btn">Show QR</Link>
+                  {!ticket.isPrinted ?
+                    <Link to={'/tickets/' + ticket.id + '/qr'} className="price__btn">Show QR</Link> : null}
+
+
                 </div>
               </div>
             })}

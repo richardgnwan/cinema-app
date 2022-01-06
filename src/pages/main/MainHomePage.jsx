@@ -56,7 +56,7 @@ export default function MainHomePage() {
       let is_today = false, is_soon = false;
       // console.log(jadwal)
 
-      jadwal.forEach(function(j){
+      jadwal.every(function(j){
         var dateParts = j.tanggal.split("-");
         // month is 0-based, that's why we need dataParts[1] - 1
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]).toDateString();
@@ -149,12 +149,12 @@ export default function MainHomePage() {
                 <div className="card">
                   <div className="card__cover">
                     <img src= {movie.poster} alt="" />
-                    <a href="#" className="card__play">
-                      <i className="icon ion-ios-play" />
-                    </a>
+                    {/*<a href="#" className="card__play">*/}
+                    {/*  <i className="icon ion-ios-play" />*/}
+                    {/*</a>*/}
                   </div>
                   <div className="card__content">
-                    <h3 className="card__title"><a href="#">{movie.title}</a></h3>
+                    <h3 className="card__title">{movie.title}</h3>
                   </div>
                 </div>
               </div>

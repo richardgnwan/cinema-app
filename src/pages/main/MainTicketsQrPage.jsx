@@ -3,7 +3,7 @@ import MainLayout from '../../config/layouts/mainLayouts/MainLayout'
 import { query, where } from "firebase/firestore";
 import { db } from '../../config/auth/firebase'
 import {
-  BrowserRouter as Router,
+  BrowserRouter as Router, useNavigate,
   useParams
 } from "react-router-dom";
 
@@ -21,6 +21,8 @@ const MainTicketsQrPage = () => {
 
   const { id_ticket } = useParams();
   const [ticket, setTicket] = useState()
+  const navigate = useNavigate()
+
 
   const horderRef = collection(db, "horder");
   const jadwalRef = collection(db, "jadwal");
@@ -49,6 +51,22 @@ const MainTicketsQrPage = () => {
   useEffect(() => {
     getTicket();
   }, [])
+
+  const printTicket= async () => {
+    //update isPrinted
+    const userDoc = doc(db, "horder", id_ticket);
+    // const query = query(movieRef, where(documentId(), "==", id));
+
+    const newFields = {
+     isPrinted: true
+    };
+    console.log("printed")
+    await updateDoc(userDoc, newFields);
+    alert("masuk bro")
+
+    navigate('/tickets')
+  }
+
 
   return (
     <MainLayout>
@@ -86,6 +104,10 @@ const MainTicketsQrPage = () => {
                         <li><span>Running time:</span> 120 min</li>
                         <li><span>Seats:</span> {ticket && ticket.totalKursi} Seats </li>
                       </ul>
+                      <button onClick={printTicket} className="header__sign-in">
+                        <i className="icon ios-ion-md-log-out" />
+                        <span>Print Ticket</span>
+                      </button>
                     </div>
                   </div>
                   {/* end card content */}
