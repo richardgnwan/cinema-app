@@ -136,7 +136,7 @@ function ReportAdmin() {
                             const cinemaIdx = cinema.findIndex(cinema=>cinema.id==jadwal.idCinema);
                             const currMovie = movie[movieIdx];
                             const currCinema = cinema[cinemaIdx];
-                            // console.log({ movie: currMovie, cinema: currCinema})
+                            console.log({ movie: currMovie, cinema: currCinema})
 
                             if (!currMovie) return null;
                             return (
